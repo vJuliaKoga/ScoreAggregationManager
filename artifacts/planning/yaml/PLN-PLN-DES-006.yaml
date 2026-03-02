@@ -1,0 +1,80 @@
+meta:
+  artifact_id: PLN-PLN-DES-006
+  file: artifacts/planning/yaml/PLN-PLN-DES-006.yaml
+  author: gpt-5.2-codex
+  source_type: ai
+  source: artifacts/planning/PLN-PLN-FLW-003.md
+  schema_version: pln_canonical_v1
+derived_from:
+  - artifacts/planning/PLN-PLN-FLW-003.md
+  - artifacts/planning/PLN-PLN-FLW-003.md#8.5-ガバナンス指針
+rationale: >-
+  付録AのIDを運用仕様へ昇格し、要約ではなく実行可能な判定・例外・証跡設計まで定義する。
+changes:
+  - 入力→処理→出力を明示
+  - 判定基準（70/90、0.70、0.60、曖昧語10件超）を明示
+  - referenced_internal_ids / traceability.links を必須化
+ssot_note: Coach UI / Gate Runner / Allure の表記を全ファイルで統一する。
+artifact_kind: risks
+primary_section: "8.5 ガバナンス指針"
+
+design:
+  rationale: >-
+    実装者間の解釈差を抑えるため、入力→処理→出力を共通設計として固定する。
+  items:
+    - input: 成果物YAML/Markdownとchecklistresults.json。
+    - process: G1→G3→G4→G5→G2→PFの順で評価。
+    - process: G3未通過時はG4をスキップ。
+    - output: output/*.jsonとallure-results/を生成。
+
+eval:
+  rationale: >-
+    合否の恣意性を防ぐため、閾値と条件分岐を全IDで共通化する。
+  items:
+    - LOW Riskは70点以上、HIGH Riskは90点以上を目安。
+    - 総合スコア0.70未満はWarning。
+    - Faithfulness 0.60未満はFail。
+    - 曖昧語10件超はFail。
+
+risks:
+  rationale: >-
+    運用停止を避けるため、例外時の継続条件と復旧条件を事前定義する。
+  items:
+    - G4 API障害はWarning扱いで他ゲート継続。
+    - 0.65〜0.75は境界帯Warningとして再レビュー。
+    - planned_linkはWarning管理して後続で正式化。
+    - 修正前後ログをAllureで比較可能に保全。
+
+operations:
+  rationale: >-
+    日次運用で迷わないよう、手順と責任分担を固定する。
+  items:
+    - 担当者はCoach UIでDone/Abortと理由を記録。
+    - Gate Runnerは同一入力で再現可能実行。
+    - Allureは単一の証跡ハブとして運用。
+    - Warning案件は次回レビューで再評価。
+
+referenced_internal_ids:
+  - PLN-PLN-CONS-001
+  - PLN-PLN-DES-001
+  - PLN-PLN-DES-002
+  - PLN-PLN-DES-003
+  - PLN-PLN-DES-004
+  - PLN-PLN-DES-005
+
+traceability:
+  rationale: >-
+    IDリンクを常設し、企画→要件→設計の追跡性を維持する。
+  links:
+    - from: PLN-PLN-DES-006
+      to: artifacts/planning/PLN-PLN-FLW-003.md
+      relation: derived_from
+    - from: artifacts/planning/PLN-PLN-FLW-003.md
+      to: PLN-PLN-DES-006
+      relation: specifies
+    - from: PLN-PLN-DES-006
+      to: output/tracematrix.json
+      relation: verified_by
+    - from: PLN-PLN-DES-006
+      to: allure-results/
+      relation: evidenced_by

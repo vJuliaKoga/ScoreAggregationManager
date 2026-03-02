@@ -13,17 +13,17 @@ meta:
 以下の入力ファイルを読み、Run-1（pln_transform: 企画MD↔企画YAMLの変換品質）についてレポートを作成してください。
 
 【レポートID】
-RES-PLN-TRANS-002
+RES-PLN-TRANS-003
 
 【出力先】
 
-- output\G4\reports\pln_transform\RES-PLN-TRANS-002.md
+- output\G4\reports\pln_transform\RES-PLN-TRANS-003.md
 
 【入力（必ず読む）】
 
 1. DeepEval出力JSON（最新のRun-1）
 
-- output\G4\pln_transform\artifacts_planning_yaml_v2\0301_1957.json
+- output\G4\pln_transform\artifacts_planning_yaml_v3\0302_1139.json
 
 2. 参照元（企画MD）
 
@@ -31,7 +31,7 @@ RES-PLN-TRANS-002
 
 3. 評価対象（企画YAML分割）
 
-- artifacts\planning\yaml\v2（ディレクトリ内のyamlを必要に応じて参照）
+- artifacts\planning\yaml\v3（ディレクトリ内のyamlを必要に応じて参照）
 
 4. 使用チェックリスト
 

@@ -33,7 +33,7 @@ interface LogEvent {
   occurredAtLocal: string;
 }
 
-// --- Mock Data ---
+// --- Mock Data (★直列フローに修正) ---
 const mockTemplate: TemplateNode[] = [
   {
     nodeId: 'P-001',
@@ -43,7 +43,7 @@ const mockTemplate: TemplateNode[] = [
       { checkId: 'P-001-C1', text: '目的・KPIが1枚で説明できるか', checked: false },
       { checkId: 'P-001-C2', text: '対象範囲（スコープ）が明確か', checked: false },
     ],
-    unlocks: ['P-002', 'P-003'],
+    unlocks: ['P-002'], // ★P-003への同時分岐を削除し、一本道に
     ui: { initialVisible: true },
   },
   {
@@ -53,7 +53,7 @@ const mockTemplate: TemplateNode[] = [
     detailedChecks: [
       { checkId: 'P-002-C1', text: '承認者がアサインされているか', checked: false },
     ],
-    unlocks: ['P-004'],
+    unlocks: ['P-003'], // ★P-003へ接続
     ui: { initialVisible: false },
   },
   {
@@ -114,13 +114,23 @@ export default function CoachUI() {
     setNodeStates(initialStates);
   }, []); 
 
+  const handleNodeClick = (e: React.MouseEvent, nodeId: string) => {
+    e.stopPropagation();
+    setSelectedNodeId(nodeId);
+    const state = nodeStates[nodeId];
+    if (state) {
+      setActorName(state.actorName || actorName); 
+      setPendingReason(state.pendingReason || ''); 
+    }
+  };
+
   const handleCheckChange = (nodeId: string, checkId: string, isChecked: boolean) => {
     setNodeStates(prev => ({
       ...prev,
       [nodeId]: {
         ...prev[nodeId],
         checkedItems: {
-          ...prev[nodeId].checkedItems,
+          ...prev[nodeId]?.checkedItems,
           [checkId]: isChecked
         },
         updatedAtLocal: new Date().toISOString()
@@ -128,7 +138,6 @@ export default function CoachUI() {
     }));
   };
 
-  // カスタムノード用のテキスト編集ハンドラ
   const handleCustomCheckTextChange = (nodeId: string, checkId: string, newText: string) => {
     setNodes(prev => prev.map(n => {
       if (n.nodeId === nodeId) {
@@ -143,7 +152,6 @@ export default function CoachUI() {
     }));
   };
 
-  // リスクレベル変更ハンドラ
   const handleRiskLevelChange = (nodeId: string, newRiskLevel: RiskLevel) => {
     setNodeStates(prev => ({
       ...prev,
@@ -161,7 +169,7 @@ export default function CoachUI() {
       return;
     }
     if (newStatus === 'Pending' && !pendingReason.trim()) {
-      alert('Pending理由を入力してください。');
+      alert('Pending理由を入力してください。下のテキストボックスに理由を記載してからボタンを押してください。');
       return;
     }
 
@@ -173,16 +181,16 @@ export default function CoachUI() {
       [nodeId]: {
         ...prev[nodeId],
         status: newStatus,
-        pendingReason: newStatus === 'Pending' ? pendingReason : prev[nodeId].pendingReason,
+        pendingReason: newStatus === 'Pending' ? pendingReason : prev[nodeId]?.pendingReason,
         actorName: actorName,
         updatedAtLocal: timestamp,
       }
     }));
 
     const newLogEvent: LogEvent = {
-      eventId: `evt-${crypto.randomUUID()}`,
+      eventId: `evt-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       nodeId: nodeId,
-      fromStatus: currentState.status,
+      fromStatus: currentState?.status || 'ToDo',
       toStatus: newStatus,
       actorName: actorName,
       reason: newStatus === 'Pending' ? pendingReason : null,
@@ -201,7 +209,9 @@ export default function CoachUI() {
           });
         }, 500);
       }
-      if (newStatus === 'Done') setSelectedNodeId(null);
+      if (newStatus === 'Done') {
+         setSelectedNodeId(null);
+      }
     }
   };
 
@@ -211,9 +221,8 @@ export default function CoachUI() {
       return;
     }
 
-    const newNodeId = `CUSTOM-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+    const newNodeId = `CUSTOM-${Date.now()}`;
     
-    // 5行の空のチェックリストを生成
     const newChecks = Array.from({ length: 5 }).map((_, i) => ({
       checkId: `${newNodeId}-C${i + 1}`,
       text: '',
@@ -242,7 +251,7 @@ export default function CoachUI() {
       [newNodeId]: {
         status: 'ToDo',
         pendingReason: null,
-        actorName: null,
+        actorName: actorName || null,
         riskLevel: 'C',
         updatedAtLocal: null,
         checkedItems: initialChecked
@@ -268,7 +277,14 @@ export default function CoachUI() {
       exportedAtLocal: new Date().toISOString(),
       actor: { displayName: actorName || "未入力", actorId: null },
       nodes: nodeStates,
-      customNodeDefinitions: nodes.filter(n => n.isCustom), // カスタム定義も保存
+      // ★修正: 出力定義側に、UIでチェックされた状態(true/false)を確実にマージして出力
+      customNodeDefinitions: nodes.filter(n => n.isCustom).map(n => ({
+        ...n,
+        detailedChecks: n.detailedChecks.map(c => ({
+          ...c,
+          checked: nodeStates[n.nodeId]?.checkedItems?.[c.checkId] || false
+        }))
+      })),
       logEvents: logEvents
     };
 
@@ -284,7 +300,7 @@ export default function CoachUI() {
     URL.revokeObjectURL(url);
   };
 
-  const selectedNode = nodes.find(n => n.nodeId === selectedNodeId);
+  const selectedNode = selectedNodeId ? nodes.find(n => n.nodeId === selectedNodeId) : null;
   const selectedState = selectedNodeId ? nodeStates[selectedNodeId] : null;
 
   const allPredefinedDone = mockTemplate.every(n => {
@@ -292,18 +308,20 @@ export default function CoachUI() {
     return st === 'Done' || st === 'Pending';
   });
   const lastNodeState = nodeStates[lastNodeId]?.status;
-  // 上限撤廃：最後のノードが完了していれば常に表示
   const showAddButton = allPredefinedDone && (lastNodeState === 'Done' || lastNodeState === 'Pending');
 
   return (
-    <div className="flex h-screen w-full bg-[#0B0F19] text-slate-200 overflow-hidden font-sans">
+    <div 
+      className="flex h-screen w-full bg-black text-slate-200 overflow-hidden font-sans relative"
+      onClick={() => setSelectedNodeId(null)}
+    >
       
       <div className="absolute top-0 left-0 p-6 z-10 w-full flex justify-between pointer-events-none">
         <div>
           <h1 className="text-xl font-bold text-blue-400 tracking-wider">Coach UI <span className="text-sm text-slate-500 font-normal">| PLANNING PHASE</span></h1>
         </div>
         <button 
-          onClick={handleExportJSON}
+          onClick={(e) => { e.stopPropagation(); handleExportJSON(); }}
           className="pointer-events-auto px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-indigo-300 rounded shadow-lg transition-all text-sm font-medium flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -325,11 +343,11 @@ export default function CoachUI() {
             return (
               <div 
                 key={node.nodeId}
-                onClick={() => setSelectedNodeId(node.nodeId)}
+                onClick={(e) => handleNodeClick(e, node.nodeId)}
                 className={`
                   relative z-10 w-64 p-5 rounded-xl border cursor-pointer transition-all duration-500 ease-out transform
                   ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}
-                  ${isActive ? 'ring-2 ring-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] bg-slate-800' : 'bg-[#151B2B] hover:bg-slate-800'}
+                  ${isActive ? 'ring-2 ring-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] bg-slate-800' : 'bg-[#0A0A0A] hover:bg-slate-800'}
                   ${isDone ? 'border-emerald-500/50' : isPending ? 'border-amber-500/50' : 'border-indigo-500/30'}
                 `}
               >
@@ -349,7 +367,7 @@ export default function CoachUI() {
                 {node.unlocks.map(targetId => {
                    if (!visibleNodes.includes(targetId)) return null;
                    return (
-                    <svg key={`${node.nodeId}-${targetId}`} className="absolute top-1/2 left-full w-16 h-2 -translate-y-1/2 overflow-visible z-0">
+                    <svg key={`${node.nodeId}-${targetId}`} className="absolute top-1/2 left-full w-16 h-2 -translate-y-1/2 overflow-visible z-0 pointer-events-none">
                       <line 
                         x1="0" y1="0" x2="64" y2="0" 
                         stroke={isDone ? "#10B981" : isPending ? "#F59E0B" : "#312E81"} 
@@ -367,10 +385,10 @@ export default function CoachUI() {
           {showAddButton && (
             <div 
               className="relative z-10 w-20 h-20 flex items-center justify-center rounded-xl border-2 border-dashed border-indigo-500/50 hover:bg-indigo-900/30 hover:border-blue-400 cursor-pointer transition-all opacity-100 animate-[fade-in_0.5s_ease-out]" 
-              onClick={() => setIsModalOpen(true)}
+              onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
             >
               <span className="text-3xl text-indigo-400">+</span>
-              <svg className="absolute top-1/2 right-full w-16 h-2 -translate-y-1/2 overflow-visible z-0">
+              <svg className="absolute top-1/2 right-full w-16 h-2 -translate-y-1/2 overflow-visible z-0 pointer-events-none">
                   <line x1="0" y1="0" x2="64" y2="0" stroke="#10B981" strokeWidth="2" strokeDasharray="4 4" className="animate-[draw_0.5s_ease-out_forwards]" />
               </svg>
             </div>
@@ -378,9 +396,11 @@ export default function CoachUI() {
         </div>
       </div>
 
-      <div className={`
-        w-[450px] bg-[#0F1423] border-l border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out flex flex-col z-20
-        ${selectedNodeId ? 'translate-x-0' : 'translate-x-full absolute right-0 h-full'}
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className={`
+        fixed top-0 right-0 h-full w-[450px] bg-black border-l border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out flex flex-col z-50
+        ${selectedNode && selectedState ? 'translate-x-0' : 'translate-x-full'}
       `}>
         {selectedNode && selectedState && (
           <>
@@ -402,13 +422,12 @@ export default function CoachUI() {
                 />
               </div>
 
-              {selectedNode.description && (
+              {selectedNode.description ? (
                 <div className="p-4 bg-indigo-950/20 border border-indigo-900/50 rounded-lg">
                   <p className="text-sm text-slate-300 leading-relaxed">{selectedNode.description}</p>
                 </div>
-              )}
+              ) : null}
 
-              {/* リスクレベル変更UI */}
               <div className="space-y-2">
                 <label className="text-xs text-slate-500 font-semibold uppercase tracking-wider">リスクレベル</label>
                 <div className="flex gap-2">
@@ -431,21 +450,21 @@ export default function CoachUI() {
                 </div>
               </div>
 
-              {selectedNode.detailedChecks.length > 0 && (
+              {selectedNode.detailedChecks && selectedNode.detailedChecks.length > 0 && (
                 <div className="space-y-3">
                   <label className="text-xs text-slate-500 font-semibold uppercase tracking-wider">詳細チェック項目</label>
                   {selectedNode.detailedChecks.map(check => (
                     <label key={check.checkId} className={`flex items-start gap-3 p-3 bg-[#1A2235] rounded border transition-colors ${selectedNode.isCustom ? 'border-indigo-900/50 hover:border-indigo-500' : 'border-slate-800 hover:bg-slate-800 cursor-pointer'}`}>
                       <input 
                         type="checkbox" 
-                        checked={selectedState.checkedItems[check.checkId] || false}
+                        checked={selectedState.checkedItems?.[check.checkId] || false}
                         onChange={(e) => handleCheckChange(selectedNode.nodeId, check.checkId, e.target.checked)}
                         className="mt-1 accent-blue-600 bg-slate-800 border-slate-700 cursor-pointer" 
                       />
                       {selectedNode.isCustom ? (
                         <input
                           type="text"
-                          value={check.text}
+                          value={check.text || ''}
                           onChange={(e) => handleCustomCheckTextChange(selectedNode.nodeId, check.checkId, e.target.value)}
                           placeholder="チェック項目を入力..."
                           className="w-full bg-transparent border-b border-transparent focus:border-blue-500 focus:outline-none text-sm text-slate-200 placeholder-slate-600"
@@ -458,7 +477,17 @@ export default function CoachUI() {
                 </div>
               )}
 
-              <div className="space-y-2 pt-2 border-t border-slate-800">
+              <div className="space-y-2 pt-4 border-t border-slate-800">
+                <label className="text-xs text-amber-500 font-semibold uppercase tracking-wider mb-2 block">Pending理由 (Pendingにする場合は必須)</label>
+                <textarea 
+                  value={pendingReason}
+                  onChange={(e) => setPendingReason(e.target.value)}
+                  className="w-full bg-[#1A2235] border border-amber-900/50 rounded p-2 text-sm focus:outline-none focus:border-amber-500 min-h-[80px]"
+                  placeholder="保留の理由と今後の対応方針を記載"
+                />
+              </div>
+
+              <div className="space-y-2 pt-2">
                 <label className="text-xs text-slate-500 font-semibold uppercase tracking-wider">ステータス更新</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button onClick={() => handleStatusChange(selectedNode.nodeId, 'InProgress')} className="py-2 bg-[#1A2235] hover:bg-blue-900/30 border border-slate-700 hover:border-blue-500 text-sm rounded transition-colors text-slate-300">InProgress</button>
@@ -467,23 +496,20 @@ export default function CoachUI() {
                 </div>
               </div>
 
-              <div className={`transition-all duration-300 overflow-hidden ${selectedState.status === 'Pending' || pendingReason ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <label className="text-xs text-amber-500 font-semibold uppercase tracking-wider mb-2 block">Pending 理由 (必須)</label>
-                <textarea 
-                  value={pendingReason}
-                  onChange={(e) => setPendingReason(e.target.value)}
-                  className="w-full bg-[#1A2235] border border-amber-900/50 rounded p-2 text-sm focus:outline-none focus:border-amber-500 min-h-[80px]"
-                  placeholder="保留の理由と今後の対応方針を記載"
-                />
-              </div>
             </div>
           </>
         )}
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-[#0F1423] border border-slate-800 rounded-xl p-8 w-[400px] shadow-2xl">
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="bg-black border border-slate-800 rounded-xl p-8 w-[400px] shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="text-xl font-bold text-slate-100 mb-6">カスタム項目の追加</h2>
             
             <div className="space-y-4 mb-8">

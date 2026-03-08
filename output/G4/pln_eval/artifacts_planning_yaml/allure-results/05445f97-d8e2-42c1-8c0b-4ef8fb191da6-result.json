@@ -1,0 +1,42 @@
+{
+  "uuid": "05445f97-d8e2-42c1-8c0b-4ef8fb191da6",
+  "name": "Completeness :: PLN-PLN-QADESIGN-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899759191,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Completeness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "null_total=14 suspicious_nulls=0 (evidence_th=0.12)",
+  "steps": []
+}

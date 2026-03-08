@@ -1,0 +1,42 @@
+{
+  "uuid": "6cabe9ce-c02d-4438-8ce8-3059d2bdfa41",
+  "name": "Faithfulness :: PLN-PLN-KPI-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938777499,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.5"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=5 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.025) note: Phase別に設定\n- (sim=0.026) - CheckFlow利用者数\n- (sim=0.026) - チェックリスト完了率\n- (sim=0.026) - CI組込みチーム数\n- (sim=0.051) - 理由記入率（100%）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

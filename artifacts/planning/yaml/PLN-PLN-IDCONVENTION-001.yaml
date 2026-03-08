@@ -31,7 +31,7 @@ id_issuer:
     nnn_digits: 3
   components:
     PREFIX:
-      description: 成果物種別
+      description: 'PREFIX：成果物種別（PLN/REQ/BAS/DET/CHK/PRM/RES/ABT/DEC…）'
       values:
       - PLN
       - REQ
@@ -43,7 +43,7 @@ id_issuer:
       - ABT
       - DEC
     PHASE:
-      description: 工程
+      description: 'PHASE：工程（PLN/REQ/BAS/DET/OPS…）'
       values:
       - PLN
       - REQ
@@ -51,7 +51,7 @@ id_issuer:
       - DET
       - OPS
     PURPOSE:
-      description: 用途
+      description: 'PURPOSE：用途（GOAL/PROB/SCOPE/CONS/FNC/NFR/DES/EVAL/AMB/YAML…）'
       values:
       - GOAL
       - PROB

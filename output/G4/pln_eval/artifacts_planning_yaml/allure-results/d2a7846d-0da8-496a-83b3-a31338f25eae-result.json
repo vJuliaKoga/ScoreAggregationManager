@@ -1,0 +1,42 @@
+{
+  "uuid": "d2a7846d-0da8-496a-83b3-a31338f25eae",
+  "name": "Faithfulness :: PLN-PLN-PHILOSOPHY-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938777394,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "172d6a26-6101-40d4-a0bd-dc25a5c6deec",
+  "name": "Faithfulness :: PLN-PLN-CI_INTEGRATION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899783176,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 0.70未満は必ずWarningを出す\n- (sim=0.000) artifact_kind: integration\n- (sim=0.000) integration:\n- (sim=0.000) components:\n- (sim=0.000) - responsibilities:\n- (sim=0.000) responsibilities:\n- (sim=0.000) responsibilities:\n- (sim=0.000) recommended_flow:\n- (sim=0.000) action: ワークフローツール最終工程で CI成果物（zip等）をアップロード\n- (sim=0.000) generates:\n- (sim=0.000) minimum_artifact_spec:\n- (sim=0.000) ci_gate_json:\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

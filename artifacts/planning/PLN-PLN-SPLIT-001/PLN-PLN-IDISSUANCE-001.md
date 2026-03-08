@@ -18,12 +18,15 @@ meta:
 
 ### 13.1 ID発行（issue_id.py）
 
-本企画は、ID採番のための最小ユーティリティを同梱する。`issue_id.py` は以下を行う：
+本企画は、ID採番のための最小ユーティリティを同梱する。issue_id.py は以下を行う：
 
 - IDレジストリ（id_rules_registry.yaml）を読み、指定キー（PREFIX-PHASE-PURPOSE）の次IDを発行
-- レジストリの `next_nnn` 更新
+- レジストリの next_nnn 更新
 - 発行ログ（id_issued_log.yaml）への追記
 - stdoutへ発行ID出力（他ツール連携を想定）
 
-※現状は single-user 前提（ロックなし）で運用開始し、チーム同時利用が増えた段階でロック/集中管理へ拡張する。
+運用上の制約：
+
+- 現状は single-user 前提（ロックなし）で運用開始する
+- チーム同時利用が増えた段階でロック/集中管理へ拡張する
 

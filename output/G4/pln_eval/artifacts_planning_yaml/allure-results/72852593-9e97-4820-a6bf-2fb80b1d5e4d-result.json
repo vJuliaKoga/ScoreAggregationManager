@@ -1,0 +1,42 @@
+{
+  "uuid": "72852593-9e97-4820-a6bf-2fb80b1d5e4d",
+  "name": "Faithfulness :: PLN-PLN-DEFINITION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899773528,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) artifact_kind: scope\n- (sim=0.000) internal_definition:\n- (sim=0.000) implementation_mapping:\n- (sim=0.000) implementation:\n- (sim=0.000) implementation:\n- (sim=0.000) implementation:\n- (sim=0.021) - ② 指示が守られていることを確認する\n- (sim=0.021) - ① AIに正しく指示を与える\n- (sim=0.021) - 曖昧語排除チェック\n- (sim=0.021) - 構造一貫性テスト\n- (sim=0.042) primary_section: 4. QA4AIDDの定義（本企画での解釈）\n- (sim=0.043) - definition: 正しく指示\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

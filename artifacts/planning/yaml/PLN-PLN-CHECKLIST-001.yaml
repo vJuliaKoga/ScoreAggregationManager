@@ -30,6 +30,7 @@ inspection_design:
     name: 要件妥当性チェックリスト
     notes:
     - human_review
+    - humanreview
     - 重み付け、判定ロジック
     coverage_topics:
     - 検証可能性

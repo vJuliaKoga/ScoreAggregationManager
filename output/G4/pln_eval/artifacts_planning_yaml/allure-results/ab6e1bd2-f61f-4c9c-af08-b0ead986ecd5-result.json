@@ -1,0 +1,42 @@
+{
+  "uuid": "ab6e1bd2-f61f-4c9c-af08-b0ead986ecd5",
+  "name": "Consistency :: GLOBAL",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899759191,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Consistency"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.9445"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "contradictions=4",
+  "steps": []
+}

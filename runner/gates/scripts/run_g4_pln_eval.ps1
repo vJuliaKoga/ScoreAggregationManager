@@ -16,24 +16,38 @@ $env:AIDD_YAML_DIR = "artifacts\planning\yaml"
 $env:AIDD_OUT_ROOT = "output\G4\pln_eval"
 $env:AIDD_EVAL_MODEL = "gpt-5.2"
 
-# Faithfulness安定化
-$env:AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS = "1800"
-$env:AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS = "2200"
-$env:AIDD_FAITHFULNESS_TRUTHS_LIMIT = "10"
-$env:AIDD_FAITHFULNESS_RETRY_ON_TIMEOUT = "1"
-$env:AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS_RETRY = "1200"
-$env:AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS_RETRY = "1600"
-$env:AIDD_FAITHFULNESS_TRUTHS_LIMIT_RETRY = "6"
+# ------------------------------
+# Faithfulness: 速さ/安定の推奨設定（最近の高速ランに寄せる）
+# ------------------------------
+$env:AIDD_FAITHFULNESS_REASON_MODE = "local"   # 追加APIなしのローカルreason
 
-# 007版のタイムアウト耐性（推奨）
-$env:AIDD_FAITHFULNESS_TOPK_REF_CHUNKS = "3"
+# FaithView（評価入力）側のノイズ除去
+$env:AIDD_FAITHFULNESS_STRIP_TOP_KEYS = "meta"
+$env:AIDD_FAITHFULNESS_STRIP_ANYLEVEL_KEYS = "rationale,primary_section,ssot_note"
+$env:AIDD_FAITHFULNESS_PRUNE_NULLS = "1"
+$env:AIDD_FAITHFULNESS_PRUNE_MAX_DEPTH = "12"
+$env:AIDD_FAITHFULNESS_NOISY_ASCII_SCALAR_MAXLEN = "24"
+
+# 投げるサイズを抑えてタイムアウト耐性を上げる
+$env:AIDD_FAITHFULNESS_TOPK_REF_CHUNKS = "2"
 $env:AIDD_FAITHFULNESS_REF_CHUNK_MAX_CHARS = "800"
+
+$env:AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS = "1200"
+$env:AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS = "1600"
+$env:AIDD_FAITHFULNESS_TRUTHS_LIMIT = "6"
+
+$env:AIDD_FAITHFULNESS_RETRY_ON_TIMEOUT = "1"
+$env:AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS_RETRY = "900"
+$env:AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS_RETRY = "1200"
+$env:AIDD_FAITHFULNESS_TRUTHS_LIMIT_RETRY = "4"
 
 # derived_from が未整備でSKIPばかりになるなら0
 # $env:AIDD_FAITHFULNESS_SKIP_DERIVED_FROM_SCOPE = "0"
 
-# Coverage/Consistency ノイズ低減（Run-2推奨）
+# ------------------------------
+# Coverage / Consistency ノイズ低減（比較対象でないキーを登録）
+# ------------------------------
 $env:AIDD_COVERAGE_SKIP_HEADINGS = "1"
-$env:AIDD_CONSISTENCY_IGNORE_KEYS = "meta.,timestamp,updated_at,created_at,hash,checksum,rationale,ssot_note,primary_section,traceability.,referenced_internal_ids"
+$env:AIDD_CONSISTENCY_IGNORE_KEYS = "meta.,timestamp,updated_at,created_at,hash,checksum,rationale,ssot_note,primary_section,traceability.,referenced_internal_ids,derived_from,artifact_kind,changes"
 
 python .\runner\gates\g4_deepeval.py

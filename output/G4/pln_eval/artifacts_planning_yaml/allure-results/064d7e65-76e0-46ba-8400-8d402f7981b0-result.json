@@ -1,0 +1,42 @@
+{
+  "uuid": "064d7e65-76e0-46ba-8400-8d402f7981b0",
+  "name": "Coverage :: PLN-PLN-CI_INTEGRATION-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938770251,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.8095"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-CI_INTEGRATION-001.md'] covered_items=17/21 (sim_th=0.25)",
+  "steps": []
+}

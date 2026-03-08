@@ -1,0 +1,42 @@
+{
+  "uuid": "36af05b8-d9d0-4781-90c8-d3e08415e391",
+  "name": "Faithfulness :: PLN-PLN-CI_INTEGRATION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772936097219,
+  "stop": 1772936123930,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 0.70未満は必ずWarningを出す\n- (sim=0.000) - CI成果物をアップロードして最終サマリを1枚に集約\n- (sim=0.000) - pass|warn|fail\n- (sim=0.000) - ブロック（Fail）条件は重大ゲート（例：スキーマ逸脱、必須情報欠落等）に限定し、段階的に導入\n- (sim=0.025) - name: ワークフローツール（最終工程）\n- (sim=0.025) - name: 証跡ハブ（Allure）\n- (sim=0.025) action: 同工程でチェックリスト入力を確定（Coach相当）\n- (sim=0.038) - 各ゲート・各評価軸のスコアを機械可読な成果物として出力（再現可能・比較可能）\n- (sim=0.038) - チェックリスト（Coach相当）の入力・承認\n- (sim=0.038) - 合計点（自動＋チェックリスト）\n- (sim=0.051) action: ワークフローツール最終工程で CI成果物（zip等）をアップロード\n- (sim=0.051) - 自動ゲート結果＋人の判断ログ（理由・証跡リンク）＋サマリを統合して保管\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "4968ed66-4434-4cec-857a-5745e2df2804",
+  "name": "Faithfulness :: PLN-PLN-CI_INTEGRATION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772898203035,
+  "stop": 1772898684124,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.3585"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "local reason: 根拠薄い候補 top5 (line-vs-ref Jaccard)\n- L32 sim=0.000 [断定語]: recommended_flow:\n- L51 sim=0.000 [断定語]: required_fields:\n- L58 sim=0.000 [断定語]: required_fields:\n- L66 sim=0.000 [断定語]: - チェック項目はリスクレベル（High/Med/Low）を持たせ、重み付けできるようにする\n- L71 sim=0.000 [断定語]: - 0.70未満は必ずWarningを出す\n対処提案: 根拠が必要な断定は参照MDへ逆輸入するか、根拠未確定ならYAML表現を「（案）」へ落として断定を避けてください。",
+  "steps": []
+}

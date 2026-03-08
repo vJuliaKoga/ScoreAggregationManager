@@ -1,0 +1,42 @@
+{
+  "uuid": "33d67a7a-c280-41b9-b63a-5cd5b8a6c936",
+  "name": "Completeness :: PLN-PLN-EXEC-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772934970105,
+  "stop": 1772934970105,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Completeness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "null_total=14 suspicious_nulls=0 (evidence_th=0.12)",
+  "steps": []
+}

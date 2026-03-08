@@ -9,6 +9,7 @@ npm start
 ```
 
 起動すると以下が表示されます：
+
 ```
 ✅ CheckFlow API Server running on http://localhost:3001
    Health check: http://localhost:3001/api/health
@@ -16,6 +17,7 @@ npm start
 ```
 
 初回起動時、管理者アカウントが自動作成されます：
+
 - **Username:** Sam
 - **Password:** admin
 - **Role:** Admin
@@ -48,12 +50,11 @@ npm start         # 再起動で初期Admin再作成
 
 ## API エンドポイント一覧
 
-| Method | Path | 用途 |
-|--------|------|------|
-| GET | `/api/health` | サーバー稼働確認 |
-| POST | `/api/login` | ログイン認証 |
-| GET | `/api/users` | ユーザー一覧取得 |
-| POST | `/api/users` | ユーザー作成（Admin専用） |
-| PUT | `/api/users/:name/role` | ロール変更（Admin専用） |
-| DELETE | `/api/users/:name` | ユーザー削除（Admin専用） |
-
+| Method | Path                    | 用途                      |
+| ------ | ----------------------- | ------------------------- |
+| GET    | `/api/health`           | サーバー稼働確認          |
+| POST   | `/api/login`            | ログイン認証              |
+| GET    | `/api/users`            | ユーザー一覧取得          |
+| POST   | `/api/users`            | ユーザー作成（Admin専用） |
+| PUT    | `/api/users/:name/role` | ロール変更（Admin専用）   |
+| DELETE | `/api/users/:name`      | ユーザー削除（Admin専用） |

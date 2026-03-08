@@ -1,0 +1,42 @@
+{
+  "uuid": "03b5f2af-3795-445a-8de8-c4179aecf3c8",
+  "name": "Faithfulness :: PLN-PLN-SCOREPOLICY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899779868,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.1818"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) primary_section: 9. スコア運用ポリシー（重要：合否の唯一根拠にしない）\n- (sim=0.000) - 0.70未満はWarningを必ず出す\n- (sim=0.000) artifact_kind: score_policy\n- (sim=0.000) score_policy:\n- (sim=0.000) fatal_conditions:\n- (sim=0.000) criterion: スキーマ逸脱など\n- (sim=0.000) criterion: 検出数が10件超\n- (sim=0.000) total_score:\n- (sim=0.000) risk_level_operation:\n- (sim=0.000) - level: LOW Risk\n- (sim=0.000) pass_score: 70点以上\n- (sim=0.000) guidance: 軽微な構造違反や数件の曖昧語は減点対応とし、スピードを優先\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "066209aa-29d2-474c-865d-2ccb34be6194",
+  "name": "Faithfulness :: PLN-PLN-ROADMAP-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772934970105,
+  "stop": 1772934985272,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=11 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.021) period: 1ヶ月\n- (sim=0.021) period: 2ヶ月\n- (sim=0.021) period: 3ヶ月〜\n- (sim=0.022) - phase: Phase 1\n- (sim=0.022) - phase: Phase 2\n- (sim=0.022) - phase: Phase 3\n- (sim=0.043) - PLNパック追加（企画段階から品質観点を導入）\n- (sim=0.043) - ConTrack Adapter実装検討\n- (sim=0.064) primary_section: 17. ロードマップ（社内展開）\n- (sim=0.065) - REQパック配布（Coach先行、Runnerは任意）\n- (sim=0.077) rationale: 見出し『17. ロードマップ（社内展開）』の Phase 列挙を、段階導入の計画として workflow に構造化した。\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

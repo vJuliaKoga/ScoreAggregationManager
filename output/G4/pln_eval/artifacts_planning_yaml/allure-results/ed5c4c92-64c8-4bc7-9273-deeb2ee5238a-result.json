@@ -1,0 +1,42 @@
+{
+  "uuid": "ed5c4c92-64c8-4bc7-9273-deeb2ee5238a",
+  "name": "Faithfulness :: PLN-PLN-DATASPEC-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899771979,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.1667"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - contents: レポートに統合するための出力\n- (sim=0.000) artifact_kind: architecture\n- (sim=0.000) architecture:\n- (sim=0.000) data_spec:\n- (sim=0.000) checklistresults_json:\n- (sim=0.000) producer: Coach\n- (sim=0.000) verified_by: G2\n- (sim=0.000) gate_runner_outputs:\n- (sim=0.026) rationale: 見出し『15. 具体的なデータ仕様（最低限）』から、Coach出力とRunner出力の最低仕様を抽出し architecture に整理した。\n- (sim=0.030) primary_section: 15. 具体的なデータ仕様（最低限）\n- (sim=0.033) - checkedby\n- (sim=0.033) - timestamp\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

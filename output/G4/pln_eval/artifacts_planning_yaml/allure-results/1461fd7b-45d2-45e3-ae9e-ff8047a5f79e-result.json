@@ -1,0 +1,42 @@
+{
+  "uuid": "1461fd7b-45d2-45e3-ae9e-ff8047a5f79e",
+  "name": "Faithfulness :: PLN-PLN-CHECKLIST-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772934970105,
+  "stop": 1772934994379,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=10 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.020) rationale: 見出し『10. チェックリスト資産（標準搭載）』から、チェックリスト資産の説明と企画MD↔企画YAML整合性の方針を抽出し inspection_design\n- (sim=0.022) primary_section: 10. チェックリスト資産（標準搭載）\n- (sim=0.023) - name: 要件妥当性チェックリスト\n- (sim=0.024) - トレーサビリティ\n- (sim=0.024) - 詳細はPLNパックのチェックリストに反映\n- (sim=0.048) - 重み付け、判定ロジック\n- (sim=0.048) - planning_v1 の工程パック構成例にも含まれる\n- (sim=0.070) - name: 企画MD↔企画YAML整合性（PLNパックに搭載）\n- (sim=0.071) - 運用考慮（ログ・権限）\n- (sim=0.095) - 企画文書をYAML化し、構造・ID・metaを検証するゲートを置く\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

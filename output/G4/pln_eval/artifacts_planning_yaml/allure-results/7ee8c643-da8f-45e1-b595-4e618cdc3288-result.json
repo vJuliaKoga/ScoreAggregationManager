@@ -1,0 +1,42 @@
+{
+  "uuid": "7ee8c643-da8f-45e1-b595-4e618cdc3288",
+  "name": "Completeness :: PLN-PLN-ALLURE-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938770251,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Completeness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "null_total=14 suspicious_nulls=0 (evidence_th=0.12)",
+  "steps": []
+}

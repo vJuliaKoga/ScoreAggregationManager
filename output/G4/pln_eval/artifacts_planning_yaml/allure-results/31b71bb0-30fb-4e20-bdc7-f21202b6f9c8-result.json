@@ -1,0 +1,42 @@
+{
+  "uuid": "31b71bb0-30fb-4e20-bdc7-f21202b6f9c8",
+  "name": "Faithfulness :: PLN-PLN-CHECKLIST-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772898203035,
+  "stop": 1772898228541,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.1282"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "local reason: 根拠薄い候補 top5 (line-vs-ref Jaccard)\n- L19 sim=0.015 [断定語]: name: 要件妥当性チェックリスト\n- L32 sim=0.062 [断定語]: - 企画文書をYAML化し、構造・ID・metaを検証するゲートを置く\n- L3 sim=0.000: に整理した。\n- L4 sim=0.000: changes: null\n- L5 sim=0.000: ssot_note: null\n対処提案: 根拠が必要な断定は参照MDへ逆輸入するか、根拠未確定ならYAML表現を「（案）」へ落として断定を避けてください。",
+  "steps": []
+}

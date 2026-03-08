@@ -1,0 +1,42 @@
+{
+  "uuid": "c7e95080-ead0-4f9a-b03e-5c0cb0b7ca06",
+  "name": "Faithfulness :: PLN-PLN-ALLURE-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938790659,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.25"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=9 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - purpose: モデル変動や改修前後の品質変化のトレンド可視化\n- (sim=0.000) purpose: 判断回避の常態化を検知\n- (sim=0.013) basis: ウェイト定義（9.3節）に基づく合算\n- (sim=0.014) - name: 重み付き合算スコア\n- (sim=0.027) - name: 各ゲートの内訳・スコア分布\n- (sim=0.041) - name: G2（人のチェックリスト）スコア\n- (sim=0.041) - name: Abort分析（カテゴリ分布、理由品質）\n- (sim=0.055) - name: 自動ゲート結果（G1〜G5, PF）\n- (sim=0.068) - name: Traceability Matrix（要件→設計→テストの紐付け）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

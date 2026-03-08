@@ -1,0 +1,42 @@
+{
+  "uuid": "7858d69a-d160-4637-938e-86b36463b70d",
+  "name": "Faithfulness :: PLN-PLN-PACK-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899776815,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=10 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) artifact_kind: workflow\n- (sim=0.000) pack_strategy:\n- (sim=0.000) - contents:\n- (sim=0.000) - contents:\n- (sim=0.017) - 企画を機械可読にする\n- (sim=0.017) - 企画段階のQA観点を入れる\n- (sim=0.034) primary_section: 7. 工程パック戦略（社内導入を現実にする）\n- (sim=0.052) - pack: REQ（要件）\n- (sim=0.052) - pack: PLN（企画）\n- (sim=0.069) - 要件妥当性チェック（human+Deep Eval）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "48e418f5-1a55-4677-93be-8170b44dbc68",
+  "name": "Faithfulness :: PLN-PLN-KPI-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772898203035,
+  "stop": 1772898225765,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.3333"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "local reason: 根拠薄い候補 top5 (line-vs-ref Jaccard)\n- L3 sim=0.000: changes: null\n- L4 sim=0.000: ssot_note: null\n- L5 sim=0.000: artifact_kind: goal\n- L13 sim=0.000: - 手戻り削減率\n- L15 sim=0.000: problem: null\n対処提案: 根拠が必要な断定は参照MDへ逆輸入するか、根拠未確定ならYAML表現を「（案）」へ落として断定を避けてください。",
+  "steps": []
+}

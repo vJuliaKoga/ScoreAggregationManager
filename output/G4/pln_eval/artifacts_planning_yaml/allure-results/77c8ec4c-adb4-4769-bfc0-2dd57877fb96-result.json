@@ -1,0 +1,42 @@
+{
+  "uuid": "77c8ec4c-adb4-4769-bfc0-2dd57877fb96",
+  "name": "Faithfulness :: PLN-PLN-QADESIGN-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772936097219,
+  "stop": 1772936122607,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.2174"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 要件側の derivedfrom へ接続する方針\n- (sim=0.000) - 『企画→要件へトレース可能』を自動検証できるようにする\n- (sim=0.000) - viewpoint: 検証可能性\n- (sim=0.000) - viewpoint: スコープ\n- (sim=0.000) principle: 構造の逸脱を最大リスクとして設計\n- (sim=0.012) - check: 運用保守・証跡・権限の考慮があるか（最低限の宣言）\n- (sim=0.012) tool: 曖昧語検出ツール\n- (sim=0.012) tool: チェックリストツール\n- (sim=0.012) tool: 構造解析ライブラリ\n- (sim=0.012) input: 全ID参照マトリクス\n- (sim=0.012) tool: 整合性検証ツール\n- (sim=0.012) - content: Promptfoo評価\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

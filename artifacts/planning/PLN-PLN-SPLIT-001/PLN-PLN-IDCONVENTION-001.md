@@ -18,14 +18,16 @@ meta:
 
 ### 12.1 ルール（共通）
 
-**ID基本形：`{PREFIX}-{PHASE}-{PURPOSE}-{NNN}`**（NNNは3桁）。
+ID基本形：format: '{PREFIX}-{PHASE}-{PURPOSE}-{NNN}'
 
+- NNN部分：3桁の連番（nnn_digits: 3）
 - PREFIX：成果物種別（PLN/REQ/BAS/DET/CHK/PRM/RES/ABT/DEC…）
 - PHASE：工程（PLN/REQ/BAS/DET/OPS…）
 - PURPOSE：用途（GOAL/PROB/SCOPE/CONS/FNC/NFR/DES/EVAL/AMB/YAML…）
 
 ### 12.2 推奨パターン（本企画書）
 
-本企画書の主張・方針・スコープなども **PLN-PLN-\<PURPOSE>-NNN** としてIDを付与する。
-（例：PLN-PLN-FLW-001 は企画ゴール）
+本企画書の主張・方針・スコープなども PLN-PLN-{PURPOSE}-NNN としてIDを付与する。
+
+- 例：PLN-PLN-FLW-001 は企画ゴール
 

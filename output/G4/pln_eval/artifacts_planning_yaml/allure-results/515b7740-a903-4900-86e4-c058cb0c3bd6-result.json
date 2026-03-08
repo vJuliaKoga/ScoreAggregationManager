@@ -1,0 +1,42 @@
+{
+  "uuid": "515b7740-a903-4900-86e4-c058cb0c3bd6",
+  "name": "Faithfulness :: PLN-PLN-SCOREPOLICY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772938770251,
+  "stop": 1772938800871,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.1613"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 0.70未満はWarningを必ず出す\n- (sim=0.000) - Deep Eval：品質の\"定量指標\"。モデル変動を前提に、スコア推移を記録し劣化を検知する（Allureに推移も集約）。\n- (sim=0.000) - Promptfoo：プロンプト品質の回帰テストとして位置づけ、テンプレ改善サイクルの根拠にする。\n- (sim=0.000) - weight: 30%\n- (sim=0.000) - weight: 25%\n- (sim=0.000) - weight: 20%\n- (sim=0.000) - weight: 15%\n- (sim=0.000) - weight: 10%\n- (sim=0.000) criterion: スキーマ逸脱など\n- (sim=0.000) criterion: 検出数が10件超\n- (sim=0.000) - level: LOW Risk\n- (sim=0.000) pass_score: 70点以上\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

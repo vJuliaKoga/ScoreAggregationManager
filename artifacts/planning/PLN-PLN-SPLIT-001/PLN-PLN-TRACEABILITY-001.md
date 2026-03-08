@@ -18,8 +18,16 @@ meta:
 
 ### 11.1 2層設計
 
-- **Core（本ツール）**：ID抽出／参照整合（derivedfrom/tracestoの存在確認）／カバレッジ算出／未紐付け一覧／Allure出力
-- **Adapter（将来）**：ConTrack API連携（存在確認、リンク生成、関係解決）
+レイヤー構成：
 
-この方針により、ConTrackが既にあっても「品質ゲートとしての検査・可視化・ブロック」という価値が本企画側に残る。
+- layer: Core（本ツール）
+  - ID抽出
+  - 参照整合（derivedfrom/tracestoの存在確認）
+  - カバレッジ算出
+  - 未紐付け一覧
+  - Allure出力
+- layer: Adapter（将来）
+  - ConTrack API連携（存在確認、リンク生成、関係解決）
+
+value_statement: ConTrackが既にあっても、品質ゲートとしての検査・可視化・ブロックの価値が本企画側に残る。
 

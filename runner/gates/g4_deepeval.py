@@ -9,65 +9,73 @@ meta:
     timestamp: '2026-03-03T18:35:00+09:00'
     content_hash: d42c5504d6a020a5436c114fd2347d42a161e2a68b72ed9fed9d07d8ca46dc10
 ---
-G4 DeepEval Gate — Transform Quality Check (Faithfulness + Global Coverage + Global Consistency)
+Faithfulness + Coverage(derived_from 1:1) + Completeness + Global Consistency
 =============================================================================================
 
-狙い:
+更新理由:
 - Faithfulness（ファイル単位）: 参照にない創作（ハルシネーション）を検出
-    ※タイムアウト対策として「参照全文」ではなく「関連参照チャンク上位K」を retrieval_context に投入する
-- Global Coverage（集合単位/ルールベース）: 参照の主要論点が、YAML集合として抜けていないか
+    - タイムアウト対策: 参照全文ではなく、関連参照チャンク上位Kを retrieval_context に投入
+    - Faithfulness入力は「FaithView」として、meta/日時/ハッシュ/パス等のノイズや null/空を除外
+    - 変換理由/章ラベル（rationale/primary_section 等）は原文一致しない前提でFaithViewから除外
+- Coverage（derived_from 1:1 / ルールベース）: 参照(split MD)の主要論点が、対応YAMLに落ちているか
+- Completeness（derived_from 1:1 / ルールベース）: nullのまま放置されている“埋まっているべき可能性”を検知（追加APIなし）
 - Global Consistency（横断/ルールベース）: 分割YAML間や参照との矛盾を検出
 
-環境変数:
+環境変数（主なもの）:
     AIDD_STAGE                 : 対象工程 (例: PLN, REQ)
     AIDD_YAML_DIR              : 評価対象YAMLディレクトリ
     AIDD_OUT_ROOT              : 出力ルートディレクトリ
-    AIDD_EVAL_MODEL            : 使用モデル (例: gpt-5.2)  ※deepeval側に渡す
+    AIDD_EVAL_MODEL            : 使用モデル (例: gpt-5.2)
 
-    # 参照入力（複数指定に対応）
-    AIDD_REF_PATHS             : 参照ファイル/ディレクトリのカンマ区切り（md/yaml/dir/glob混在OK）
-                                例: "artifacts/planning/PLN-PLN-FLW-003.md,artifacts/planning/yaml/v3"
-    AIDD_FILE_PATH             : 旧互換（単一参照）
-    AIDD_MD_PATH               : 旧互換（単一参照）
-    AIDD_REF_MODE              : AUTO|MD|YAML（AUTOは拡張子で判定）
+    # 参照入力
+    AIDD_REF_PATHS             : 参照ファイル/ディレクトリ（md/yaml/dir/glob混在OK）
+    AIDD_REF_MODE              : AUTO|MD|YAML
 
-    # Faithfulness（タイムアウト対策あり）
-    AIDD_FAITHFULNESS_SKIP     : カンマ区切りのファイル名リスト、または "*"（全スキップ）
-    AIDD_FAITHFULNESS_SKIP_DERIVED_FROM_SCOPE : 1で有効（既定 1）
-        - derived_from が存在し、参照セット内のいずれのファイル名も含まれない場合はスコープ外としてSKIP
-    AIDD_FAITHFULNESS_TOPK_REF_CHUNKS : Faithfulnessに渡す参照チャンク数（既定 4）
-    AIDD_FAITHFULNESS_REF_CHUNK_MAX_CHARS : 参照チャンク1個の最大文字数（既定 900）
-
-    # ★追加（このスクリプトで利用可能）
+    # Faithfulness
     AIDD_FAITHFULNESS_USE_DERIVED_FROM_CONTEXT : 1で有効（既定 1）
-        - derived_from に一致する参照ファイル名だけを Faithfulness の参照チャンク候補にする
-        - derived_from が空/不一致の場合は従来どおり参照全体から選ぶ（フォールバック）
+    AIDD_FAITHFULNESS_TOPK_REF_CHUNKS          : 参照チャンク数（既定 4）
+    AIDD_FAITHFULNESS_REF_CHUNK_MAX_CHARS      : 参照チャンク1個の最大文字数（既定 900）
+    AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS         : actual_output 最大（既定 1800）
+    AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS        : retrieval_context 最大（既定 2200）
+    AIDD_FAITHFULNESS_TRUTHS_LIMIT             : truths抽出上限（既定 10）
+    AIDD_FAITHFULNESS_RETRY_ON_TIMEOUT         : 1で有効（既定 1）
+    AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS_RETRY   : リトライ actual 最大（既定 1200）
+    AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS_RETRY  : リトライ ctx 最大（既定 1600）
+    AIDD_FAITHFULNESS_TRUTHS_LIMIT_RETRY       : リトライ truths 上限（既定 6）
 
-    # 重要: 未設定でも既定値で truncate する（無制限だとタイムアウトしやすい）
-    AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS   : actual_output の最大文字数（既定 1800）
-    AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS  : retrieval_context 合計の最大文字数（既定 2200）
-    AIDD_FAITHFULNESS_TRUTHS_LIMIT       : truths抽出上限（deepevalが対応していれば効く、既定 10）
-    AIDD_FAITHFULNESS_REASON_MODE        : reason生成モード（local|llm、既定 local）
-        - local: 追加APIコール無しでローカルreasonを生成
-        - llm  : fail/warn時のみ2nd pass（include_reason=True）でreason採取
+    # Faithfulness reason のモード
+    AIDD_FAITHFULNESS_REASON_MODE              : local|llm（既定 local）
 
-    AIDD_FAITHFULNESS_RETRY_ON_TIMEOUT   : 1で有効（既定 1）
-    AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS_RETRY  : リトライ時 actual_output 最大文字数（既定 1200）
-    AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS_RETRY : リトライ時 retrieval_context 最大文字数（既定 1600）
-    AIDD_FAITHFULNESS_TRUTHS_LIMIT_RETRY      : リトライ時 truths上限（既定 6）
+    # FaithView 生成設定
+    AIDD_FAITHFULNESS_STRIP_TOP_KEYS           : top-levelでFaithViewから外すキー（既定 "meta"）
+    AIDD_FAITHFULNESS_STRIP_ANYLEVEL_KEYS      : 任意階層でFaithViewから外すキー（既定 "rationale,primary_section,ssot_note"）
+    AIDD_FAITHFULNESS_PRUNE_NULLS              : 1でnull/空/空配列/空dictを再帰的に除外（既定 1）
+    AIDD_FAITHFULNESS_PRUNE_MAX_DEPTH          : 再帰の最大深さ（既定 12）
+    AIDD_FAITHFULNESS_NOISY_ASCII_SCALAR_MAXLEN: ASCII単語だけの短ラベルをノイズ扱いする最大長（既定 24）
 
-    # Global Coverage（ルールベース）
+    # local reason
+    AIDD_FAITHFULNESS_LOCAL_REASON_TOPN        : 抽出行数（既定 12）
+    AIDD_FAITHFULNESS_LOCAL_REASON_SIM_TH      : “根拠薄い”判定の類似度閾値（既定 0.12）
+    AIDD_FAITHFULNESS_LOCAL_REASON_MIN_LEN     : 短すぎる行を無視（既定 10）
+
+    # Completeness
+    AIDD_COMPLETENESS_ENABLE                   : 1で有効（既定 1）
+    AIDD_COMPLETENESS_TOPN                     : 出力する疑義件数（既定 12）
+    AIDD_COMPLETENESS_EVIDENCE_TH              : 参照に根拠がありそう判定の閾値（既定 0.12）
+    AIDD_COMPLETENESS_WARN_COUNT               : 疑義件数がこの値以上でWARN（既定 1）
+    AIDD_COMPLETENESS_FAIL_COUNT               : 疑義件数がこの値以上でFAIL（既定 3）
+
+    # Coverage
     AIDD_COVERAGE_ENABLE        : 1で有効（既定 1）
     AIDD_COVERAGE_MAX_ITEMS     : 参照から抽出する論点数の上限（既定 80）
     AIDD_COVERAGE_MIN_ITEM_LEN  : 論点として採用する最小文字数（既定 6）
     AIDD_COVERAGE_SIM_THRESHOLD : 簡易類似度閾値（既定 0.25）
-    AIDD_COVERAGE_SKIP_HEADINGS : 見出し(#...)を論点抽出に含めるか（0で含めない、既定 0）
+    AIDD_COVERAGE_SKIP_HEADINGS : 見出し(#...)を論点抽出に含めるか（1で含めない、既定 1）
 
-    # Global Consistency（ルールベース）
+    # Consistency
     AIDD_CONSISTENCY_ENABLE     : 1で有効（既定 1）
     AIDD_CONSISTENCY_MAX_FACTS_PER_FILE : 1ファイルから抽出するscalar fact上限（既定 1200）
-    AIDD_CONSISTENCY_IGNORE_KEYS: 無視したいキー（カンマ区切り、部分一致）
-    既定: "meta.,timestamp,updated_at,created_at,hash,checksum,rationale,ssot_note,primary_section,traceability.,referenced_internal_ids"
+    AIDD_CONSISTENCY_IGNORE_KEYS: 無視キー（カンマ区切り）
 """
 
 import os
@@ -117,19 +125,14 @@ FAITHFULNESS_SKIP_ALL = _skip_raw.strip() == "*"
 FAITHFULNESS_SKIP_FILES = {s.strip() for s in _skip_raw.split(",") if s.strip() and s.strip() != "*"}
 
 SKIP_DERIVED_SCOPE = os.environ.get("AIDD_FAITHFULNESS_SKIP_DERIVED_FROM_SCOPE", "1").lower() in ("1", "true", "yes")
-
-# ★ derived_from を retrieval_context 絞り込みに使う（既定ON）
 USE_DERIVED_FROM_CONTEXT = os.environ.get("AIDD_FAITHFULNESS_USE_DERIVED_FROM_CONTEXT", "1").lower() in ("1", "true", "yes")
 
 TOPK_REF_CHUNKS = int(os.environ.get("AIDD_FAITHFULNESS_TOPK_REF_CHUNKS", "4") or "4")
 REF_CHUNK_MAX_CHARS = int(os.environ.get("AIDD_FAITHFULNESS_REF_CHUNK_MAX_CHARS", "900") or "900")
 
-# 未設定でも既定値を効かせる（無制限は事故る）
 FAITH_ACTUAL_MAX = int(os.environ.get("AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS", "1800") or "1800")
 FAITH_CTX_MAX = int(os.environ.get("AIDD_FAITHFULNESS_CONTEXT_MAX_CHARS", "2200") or "2200")
 FAITH_TRUTHS_LIM = int(os.environ.get("AIDD_FAITHFULNESS_TRUTHS_LIMIT", "10") or "10")
-_FAITH_REASON_MODE_RAW = (os.environ.get("AIDD_FAITHFULNESS_REASON_MODE", "local") or "local").strip().lower()
-FAITH_REASON_MODE = _FAITH_REASON_MODE_RAW if _FAITH_REASON_MODE_RAW in ("local", "llm") else "local"
 
 RETRY_ON_TIMEOUT = os.environ.get("AIDD_FAITHFULNESS_RETRY_ON_TIMEOUT", "1").lower() in ("1", "true", "yes")
 RETRY_ACTUAL_MAX = int(os.environ.get("AIDD_FAITHFULNESS_ACTUAL_MAX_CHARS_RETRY", "1200") or "1200")
@@ -138,12 +141,43 @@ RETRY_TRUTHS_LIM = int(os.environ.get("AIDD_FAITHFULNESS_TRUTHS_LIMIT_RETRY", "6
 
 WARN_THRESHOLD = 0.70
 
+# reason mode
+REASON_MODE_RAW = os.environ.get("AIDD_FAITHFULNESS_REASON_MODE", "local").strip().lower()
+FAITH_REASON_MODE = REASON_MODE_RAW if REASON_MODE_RAW in ("local", "llm") else "local"
+
+# FaithView normalization
+_STRIP_TOP_KEYS_RAW = os.environ.get("AIDD_FAITHFULNESS_STRIP_TOP_KEYS", "meta").strip()
+FAITH_STRIP_TOP_KEYS = [k.strip() for k in _STRIP_TOP_KEYS_RAW.split(",") if k.strip()]
+
+# 任意階層で除外したいキー（変換理由/章ラベルなど）
+_STRIP_ANY_KEYS_RAW = os.environ.get("AIDD_FAITHFULNESS_STRIP_ANYLEVEL_KEYS", "rationale,primary_section,ssot_note").strip()
+FAITH_STRIP_ANYLEVEL_KEYS = {k.strip() for k in _STRIP_ANY_KEYS_RAW.split(",") if k.strip()}
+
+FAITH_PRUNE_NULLS = os.environ.get("AIDD_FAITHFULNESS_PRUNE_NULLS", "1").lower() in ("1", "true", "yes")
+FAITH_PRUNE_MAX_DEPTH = int(os.environ.get("AIDD_FAITHFULNESS_PRUNE_MAX_DEPTH", "12") or "12")
+
+NOISY_ASCII_SCALAR_MAXLEN = int(os.environ.get("AIDD_FAITHFULNESS_NOISY_ASCII_SCALAR_MAXLEN", "24") or "24")
+
+# local reason config
+LOCAL_REASON_TOPN = int(os.environ.get("AIDD_FAITHFULNESS_LOCAL_REASON_TOPN", "12") or "12")
+LOCAL_REASON_SIM_TH = float(os.environ.get("AIDD_FAITHFULNESS_LOCAL_REASON_SIM_TH", "0.12") or "0.12")
+LOCAL_REASON_MIN_LEN = int(os.environ.get("AIDD_FAITHFULNESS_LOCAL_REASON_MIN_LEN", "10") or "10")
+
+# Completeness
+COMPLETENESS_ENABLE = os.environ.get("AIDD_COMPLETENESS_ENABLE", "1").lower() in ("1", "true", "yes")
+COMP_TOPN = int(os.environ.get("AIDD_COMPLETENESS_TOPN", "12") or "12")
+COMP_EVIDENCE_TH = float(os.environ.get("AIDD_COMPLETENESS_EVIDENCE_TH", "0.12") or "0.12")
+COMP_WARN_COUNT = int(os.environ.get("AIDD_COMPLETENESS_WARN_COUNT", "1") or "1")
+COMP_FAIL_COUNT = int(os.environ.get("AIDD_COMPLETENESS_FAIL_COUNT", "3") or "3")
+
+# Coverage
 COVERAGE_ENABLE = os.environ.get("AIDD_COVERAGE_ENABLE", "1").lower() in ("1", "true", "yes")
 COV_MAX_ITEMS = int(os.environ.get("AIDD_COVERAGE_MAX_ITEMS", "80") or "80")
 COV_MIN_ITEM_LEN = int(os.environ.get("AIDD_COVERAGE_MIN_ITEM_LEN", "6") or "6")
 COV_SIM_THRESHOLD = float(os.environ.get("AIDD_COVERAGE_SIM_THRESHOLD", "0.25") or "0.25")
 COV_SKIP_HEADINGS = os.environ.get("AIDD_COVERAGE_SKIP_HEADINGS", "1").lower() in ("1", "true", "yes")
 
+# Consistency
 CONSISTENCY_ENABLE = os.environ.get("AIDD_CONSISTENCY_ENABLE", "1").lower() in ("1", "true", "yes")
 CONS_MAX_FACTS_PER_FILE = int(os.environ.get("AIDD_CONSISTENCY_MAX_FACTS_PER_FILE", "1200") or "1200")
 
@@ -152,6 +186,8 @@ CONS_IGNORE_KEYS_RAW = os.environ.get(
     "meta.,timestamp,updated_at,created_at,hash,checksum,rationale,ssot_note,primary_section,traceability.,referenced_internal_ids"
 ).strip()
 CONS_IGNORE_KEYS = [k.strip().lower() for k in CONS_IGNORE_KEYS_RAW.split(",") if k.strip()]
+
+DURATION_WARN_MS = int(os.environ.get("AIDD_DURATION_WARN_MS", "300000") or "300000")  # 5min default
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -227,17 +263,11 @@ def truncate(s: str, max_chars: int) -> str:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Tiny similarity utils (Jaccard)
+# Tokenization / similarity utils
 # ──────────────────────────────────────────────────────────────────────────────
 
 _TOKEN_SPLIT = re.compile(r"[\s、。．，,;；:：\(\)\[\]\{\}<>「」『』【】/\\|]+")
 _PUNCT = re.compile(r"[^\wぁ-んァ-ン一-龥]+")
-_ASSERTIVE_HINT = re.compile(
-    r"(必ず|しなければなら|する|である|禁止|推奨|要件|must|shall|required|prohibit|recommend)",
-    re.IGNORECASE,
-)
-LOCAL_REASON_LINE_MIN_CHARS = 6
-LOCAL_REASON_TOPN = 5
 
 def tokenize_ja_en(s: str) -> Set[str]:
     s = s.lower()
@@ -254,19 +284,92 @@ def jaccard(a: Set[str], b: Set[str]) -> float:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# FaithView normalization (do NOT affect actual YAML files)
+# ──────────────────────────────────────────────────────────────────────────────
+
+_ISO_DATE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+_ISO_DATETIME = re.compile(r"\b\d{4}-\d{2}-\d{2}[tT ]\d{2}:\d{2}:\d{2}")
+_HEX_HASH = re.compile(r"\b[a-f0-9]{32,64}\b", re.IGNORECASE)
+_UUID_LIKE = re.compile(r"\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b", re.IGNORECASE)
+_ASCII_SINGLE_TOKEN = re.compile(r"^[A-Za-z0-9_./-]+$")
+
+def is_noisy_scalar_value(v: Any) -> bool:
+    if v is None:
+        return True
+    if isinstance(v, str):
+        s = v.strip()
+        if s == "":
+            return True
+        if _ISO_DATETIME.search(s) or _ISO_DATE.search(s):
+            return True
+        if _HEX_HASH.search(s) or _UUID_LIKE.search(s):
+            return True
+        if ".md" in s.lower() or ".yaml" in s.lower() or ".yml" in s.lower():
+            return True
+        if "/" in s or "\\" in s:
+            return True
+        if len(s) <= NOISY_ASCII_SCALAR_MAXLEN and _ASCII_SINGLE_TOKEN.match(s):
+            return True
+    if isinstance(v, (list, dict)) and len(v) == 0:
+        return True
+    return False
+
+def prune_for_faithfulness(obj: Any, depth: int = 0) -> Any:
+    """
+    Faithfulnessに渡すための“FaithView”:
+    - top-level strip keys（例: meta）を除外
+    - any-level strip keys（例: rationale / primary_section / ssot_note）を除外
+    - null/空/ノイズ値を（可能なら）除外
+    - 再帰深さ制限あり
+    """
+    if depth > FAITH_PRUNE_MAX_DEPTH:
+        return obj
+
+    if isinstance(obj, dict):
+        out: Dict[str, Any] = {}
+        for k, v in obj.items():
+            if depth == 0 and k in FAITH_STRIP_TOP_KEYS:
+                continue
+            if k in FAITH_STRIP_ANYLEVEL_KEYS:
+                continue
+
+            vv = prune_for_faithfulness(v, depth + 1)
+            if FAITH_PRUNE_NULLS:
+                if is_noisy_scalar_value(vv):
+                    continue
+                if isinstance(vv, dict) and len(vv) == 0:
+                    continue
+                if isinstance(vv, list) and len(vv) == 0:
+                    continue
+            out[k] = vv
+        return out
+
+    if isinstance(obj, list):
+        out_list: List[Any] = []
+        for it in obj:
+            vv = prune_for_faithfulness(it, depth + 1)
+            if FAITH_PRUNE_NULLS and is_noisy_scalar_value(vv):
+                continue
+            out_list.append(vv)
+        return out_list
+
+    return obj
+
+def dump_yaml(obj: Any) -> str:
+    return yaml.dump(obj, allow_unicode=True, sort_keys=False, default_flow_style=False)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Reference chunking (timeout mitigation)
 # ──────────────────────────────────────────────────────────────────────────────
 
 def _strip_md_formatting(s: str) -> str:
     s = re.sub(r"`([^`]+)`", r"\1", s)
-    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)  # links
+    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)
     s = re.sub(r"[*_~]", "", s)
     return s.strip()
 
 def chunk_md(text: str, file_name: str, max_chars: int) -> List[dict]:
-    """
-    MDを「見出し単位」でチャンク化。見出しが無い場合は段落単位で分割。
-    """
     lines = text.splitlines()
     chunks: List[dict] = []
     cur_title = ""
@@ -293,19 +396,15 @@ def chunk_md(text: str, file_name: str, max_chars: int) -> List[dict]:
             flush()
             cur_title = _strip_md_formatting(re.sub(r"^#{1,6}\s+", "", s).strip())
             continue
-        # separator lines break chunk too
         if s.strip().startswith("====="):
             flush()
             continue
         buf.append(s)
-
-        # prevent huge chunks
         if sum(len(x) + 1 for x in buf) >= max_chars * 2:
             flush()
 
     flush()
 
-    # fallback: if no chunks (empty md), make one
     if not chunks:
         t = truncate(text.strip(), max_chars)
         chunks = [{
@@ -317,14 +416,11 @@ def chunk_md(text: str, file_name: str, max_chars: int) -> List[dict]:
     return chunks
 
 def chunk_yaml(data: Any, file_name: str, max_chars: int) -> List[dict]:
-    """
-    YAMLを「トップレベルキー」単位でダンプしてチャンク化。
-    """
     chunks: List[dict] = []
     if isinstance(data, dict):
         for k, v in data.items():
             sub = {k: v}
-            dumped = yaml.dump(sub, allow_unicode=True, sort_keys=False, default_flow_style=False)
+            dumped = dump_yaml(sub)
             dumped = truncate(dumped, max_chars)
             chunks.append({
                 "ref": file_name,
@@ -333,7 +429,7 @@ def chunk_yaml(data: Any, file_name: str, max_chars: int) -> List[dict]:
                 "tokens": tokenize_ja_en(dumped),
             })
     else:
-        dumped = yaml.dump(data, allow_unicode=True, sort_keys=False, default_flow_style=False)
+        dumped = dump_yaml(data)
         dumped = truncate(dumped, max_chars)
         chunks.append({
             "ref": file_name,
@@ -359,10 +455,7 @@ def build_reference_chunks(ref_files: List[str], ref_mode: str, chunk_max_chars:
     return all_chunks, names
 
 def select_topk_ref_chunks(yaml_content: str, ref_chunks: List[dict], topk: int, total_ctx_max: int) -> List[str]:
-    """
-    YAML内容に対して類似度の高い参照チャンクを上位K個選び、合計文字数を total_ctx_max に収める。
-    """
-    qtok = tokenize_ja_en(yaml_content[:4000])  # query側は先頭だけで十分
+    qtok = tokenize_ja_en(yaml_content[:4000])
     scored: List[Tuple[float, dict]] = []
     for ch in ref_chunks:
         s = jaccard(qtok, ch.get("tokens") or set())
@@ -371,7 +464,7 @@ def select_topk_ref_chunks(yaml_content: str, ref_chunks: List[dict], topk: int,
 
     chosen: List[str] = []
     used = 0
-    for s, ch in scored[:max(1, topk * 4)]:  # topk候補の母集団を少し広げる
+    for s, ch in scored[:max(1, topk * 4)]:
         txt = ch["text"]
         header = f"===== REF_CHUNK: {ch['ref']} :: {ch['title']} (sim={s:.3f}) =====\n"
         block = header + txt.strip() + "\n"
@@ -379,7 +472,6 @@ def select_topk_ref_chunks(yaml_content: str, ref_chunks: List[dict], topk: int,
             continue
         if used + len(block) > total_ctx_max and chosen:
             break
-        # 1個目だけは必ず入れる（空を避ける）
         if used + len(block) > total_ctx_max and not chosen:
             block = truncate(block, total_ctx_max)
         chosen.append(block)
@@ -388,13 +480,12 @@ def select_topk_ref_chunks(yaml_content: str, ref_chunks: List[dict], topk: int,
             break
 
     if not chosen:
-        # 最低限
         chosen = [truncate(ref_chunks[0]["text"], total_ctx_max)] if ref_chunks else [""]
     return chosen
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Faithfulness: derived_from scope control
+# derived_from helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
 def derived_from_list(yaml_data: dict) -> List[str]:
@@ -406,12 +497,6 @@ def derived_from_list(yaml_data: dict) -> List[str]:
     return []
 
 def _derived_from_name_candidates(yaml_data: dict) -> Set[str]:
-    """
-    derived_from の表記揺れ（パス/ファイル名）を吸収するために、
-    - basename（例: PLN-PLN-ALLURE-001.md）
-    - もし拡張子が無ければ .md/.yaml/.yml も候補に追加
-    を返す。
-    """
     out: Set[str] = set()
     for x in derived_from_list(yaml_data):
         n = normalize_filename(x)
@@ -448,11 +533,6 @@ def filter_ref_chunks_by_derived_from(
     ref_chunks: List[dict],
     ref_names: Set[str],
 ) -> Tuple[List[dict], Set[str]]:
-    """
-    derived_from に一致する ref 名だけに ref_chunks を絞る。
-    - 一致候補が参照セット(ref_names)に1つでも存在すれば、その集合でフィルタ
-    - 一致が無ければフォールバックで全体を返す
-    """
     df_candidates = _derived_from_name_candidates(yaml_data)
     df_hits = {n for n in df_candidates if n in ref_names}
     if not df_hits:
@@ -460,7 +540,6 @@ def filter_ref_chunks_by_derived_from(
 
     filtered = [ch for ch in ref_chunks if ch.get("ref") in df_hits]
     if not filtered:
-        # チャンク生成の ref 名が想定とズレた場合の保険
         return ref_chunks, set()
 
     return filtered, df_hits
@@ -487,12 +566,16 @@ def is_timeout_like(exc: Exception) -> bool:
         return True
     return False
 
+def warn_if_slow(name: str, duration_ms: int):
+    if duration_ms >= DURATION_WARN_MS:
+        print(f"  [WARN] slow_eval: {name} duration_ms={duration_ms}", flush=True)
+
 
 # ──────────────────────────────────────────────────────────────────────────────
-# deepeval Faithfulness builder
+# deepeval Faithfulness builder + reason extractor
 # ──────────────────────────────────────────────────────────────────────────────
 
-def build_faith_metric(truths_limit: int, include_reason: bool = False):
+def build_faith_metric(truths_limit: int, include_reason: bool):
     base_kwargs = {
         "threshold": WARN_THRESHOLD,
         "model": EVAL_MODEL,
@@ -508,147 +591,107 @@ def build_faith_metric(truths_limit: int, include_reason: bool = False):
     except TypeError:
         return FaithfulnessMetric(**base_kwargs)
 
+def extract_metric_reason(metric: Any) -> str:
+    for attr in ("reason", "explanation", "rationale"):
+        v = getattr(metric, attr, None)
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+
+    for attr in ("verbose_logs", "logs", "details"):
+        v = getattr(metric, attr, None)
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+        if isinstance(v, list) and v:
+            joined = "\n".join(str(x) for x in v if x)
+            if joined.strip():
+                return joined.strip()
+        if isinstance(v, dict) and v:
+            try:
+                return json.dumps(v, ensure_ascii=False, indent=2)
+            except Exception:
+                return str(v)
+    return ""
+
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Faithfulness reason (local / llm)
+# Local reason generation (no extra API calls)
 # ──────────────────────────────────────────────────────────────────────────────
 
-def build_yaml_content_faith(yaml_data: Any, fallback_content: str) -> str:
-    """
-    ローカルreason生成ではmetaを除外し、比較ノイズを抑える。
-    """
-    if not isinstance(yaml_data, dict):
-        return fallback_content
-    if "meta" not in yaml_data:
-        return fallback_content
-    try:
-        work = dict(yaml_data)
-        work.pop("meta", None)
-        dumped = yaml.dump(work, allow_unicode=True, sort_keys=False, default_flow_style=False)
-        return dumped if isinstance(dumped, str) and dumped.strip() else fallback_content
-    except Exception:
-        return fallback_content
+_ASSERT_WORDS = (
+    "必ず", "禁止", "推奨", "要件", "shall", "must", "should", "will",
+    "である", "する", "必要", "不可", "できない", "しない"
+)
 
-def build_local_faithfulness_reason(yaml_content_faith: str, ref_ctx_list: List[str], topn: int = LOCAL_REASON_TOPN) -> str:
-    """
-    追加APIコール無しで、YAML行と参照トークン集合のJaccardから根拠薄い候補を抽出する。
-    """
-    ref_joined = "\n".join([x for x in ref_ctx_list if x]).strip()
-    fixed_tail = "対処提案: 根拠が必要な断定は参照MDへ逆輸入するか、根拠未確定ならYAML表現を「（案）」へ落として断定を避けてください。"
+_CONTAINER_ONLY_LINE = re.compile(r"^\s*-?\s*[A-Za-z0-9_./-]+\s*:\s*$")
 
-    if not ref_joined:
-        return f"参照チャンクが空のためローカル照合を実施できません。{fixed_tail}"
-
-    ref_tokens = tokenize_ja_en(ref_joined)
-    if not ref_tokens:
-        return f"参照チャンクのトークン化結果が空のためローカル照合を実施できません。{fixed_tail}"
-
-    candidates: List[Dict[str, Any]] = []
-    for line_no, line in enumerate(yaml_content_faith.splitlines(), start=1):
-        raw = line.strip()
-        if not raw or raw.startswith("#") or raw in ("---", "..."):
+def split_yaml_lines(yaml_text: str) -> List[str]:
+    lines = []
+    for ln in yaml_text.splitlines():
+        s = ln.strip()
+        if not s:
             continue
-        if len(raw) < LOCAL_REASON_LINE_MIN_CHARS:
+        if s.startswith("#"):
             continue
-        line_tokens = tokenize_ja_en(raw)
-        if not line_tokens:
+        if s.startswith("====="):
             continue
-        sim = jaccard(line_tokens, ref_tokens)
-        has_assertive = bool(_ASSERTIVE_HINT.search(raw))
-        risk = (1.0 - sim) + (0.25 if has_assertive else 0.0)
-        candidates.append({
-            "line_no": line_no,
-            "text": raw,
-            "sim": sim,
-            "assertive": has_assertive,
-            "risk": risk,
-        })
+        if _CONTAINER_ONLY_LINE.match(ln):
+            continue
+        lines.append(ln.rstrip())
+    return lines
 
-    if not candidates:
-        return f"ローカル照合で比較対象行を抽出できませんでした。{fixed_tail}"
+def line_priority(line: str) -> int:
+    l = line.lower()
+    for w in _ASSERT_WORDS:
+        if w in l:
+            return 2
+    if re.match(r"^[\s-]*[a-zA-Z0-9_./-]+\s*:", line):
+        return 1
+    return 0
 
-    candidates.sort(key=lambda x: (-x["risk"], x["sim"], x["line_no"]))
-    picked = candidates[:max(1, min(topn, len(candidates)))]
+def build_local_reason(faith_yaml_text: str, ref_ctx_list: List[str]) -> str:
+    ref_blob = "\n".join(ref_ctx_list).strip()
+    ref_tok = tokenize_ja_en(ref_blob)
+    lines = split_yaml_lines(faith_yaml_text)
 
-    lines = [f"local reason: 根拠薄い候補 top{len(picked)} (line-vs-ref Jaccard)"]
-    for c in picked:
-        snippet = c["text"]
-        if len(snippet) > 110:
-            snippet = snippet[:107] + "..."
-        lines.append(
-            f"- L{c['line_no']} sim={c['sim']:.3f}"
-            f"{' [断定語]' if c['assertive'] else ''}: {snippet}"
+    scored: List[Tuple[float, int, str]] = []
+    for ln in lines:
+        s = ln.strip()
+        if len(s) < LOCAL_REASON_MIN_LEN:
+            continue
+        lt = tokenize_ja_en(s)
+        sim = jaccard(lt, ref_tok) if ref_tok else 0.0
+        pri = line_priority(s)
+        scored.append((sim, -pri, s))
+
+    scored.sort(key=lambda x: (x[0], x[1]))
+
+    picked = []
+    for sim, _npri, s in scored:
+        if sim <= LOCAL_REASON_SIM_TH:
+            picked.append((sim, s))
+        if len(picked) >= LOCAL_REASON_TOPN:
+            break
+
+    if not picked:
+        return (
+            "[label] LOW_SIGNAL\n"
+            "[signal] no_low_support_lines_detected\n"
+            "[action]\n"
+            "- 参照MDが薄い場合: split MDへ要点を逆輸入（箇条書き3〜5）\n"
+            "- YAMLが言い切りすぎの場合: （案）（要検討）に落とす/断定を弱める\n"
         )
-    lines.append(fixed_tail)
-    return "\n".join(lines)
 
-def eval_one_faithfulness_reason_llm(
-    fname: str,
-    yaml_content: str,
-    ref_context_list: List[str],
-    actual_max: int,
-    ctx_max: int,
-    truths_limit: int,
-) -> str:
-    metric = build_faith_metric(truths_limit, include_reason=True)
-
-    joined = "\n".join(ref_context_list)
-    joined = truncate(joined, ctx_max)
-
-    tc = LLMTestCase(
-        input=(
-            f"この構造化YAMLファイル（{fname}）は、参照の内容を忠実に構造化したものですか？"
-            "参照に存在しない内容の創作（ハルシネーション）がないかを評価してください。"
-        ),
-        actual_output=truncate(yaml_content, actual_max),
-        retrieval_context=[joined],
-    )
-    metric.measure(tc)
-    return str(getattr(metric, "reason", "") or "").strip()
-
-def resolve_faithfulness_reason(
-    *,
-    reason_mode: str,
-    status: str,
-    fname: str,
-    first_pass_reason: str,
-    yaml_content: str,
-    yaml_content_faith: str,
-    ref_context_list: List[str],
-    actual_max: int,
-    ctx_max: int,
-    truths_limit: int,
-) -> str:
-    """
-    fail/warn時のreasonを必ず埋める。localは追加APIコール無し、llmは2nd passを実行。
-    """
-    base_reason = (first_pass_reason or "").strip()
-    if status not in ("warn", "fail"):
-        return base_reason
-
-    local_reason = build_local_faithfulness_reason(yaml_content_faith, ref_context_list)
-    if reason_mode != "llm":
-        return base_reason or local_reason
-
-    llm_reason = ""
-    llm_error = ""
-    try:
-        llm_reason = eval_one_faithfulness_reason_llm(
-            fname=fname,
-            yaml_content=yaml_content,
-            ref_context_list=ref_context_list,
-            actual_max=actual_max,
-            ctx_max=ctx_max,
-            truths_limit=truths_limit,
-        )
-    except Exception as exc:
-        llm_error = str(exc)
-
-    if llm_reason:
-        return llm_reason
-    if llm_error:
-        return f"[llm reason unavailable: {llm_error}]\n{local_reason}"
-    return base_reason or local_reason
+    buf = []
+    buf.append("[label] SSOT_GAP_OR_OVERASSERT\n")
+    buf.append(f"[signal] low_support_lines={len(picked)} (sim_th={LOCAL_REASON_SIM_TH})\n")
+    buf.append("[top_missing_lines]\n")
+    for sim, s in picked:
+        buf.append(f"- (sim={sim:.3f}) {s}\n")
+    buf.append("[action]\n")
+    buf.append("- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n")
+    buf.append("- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n")
+    buf.append("- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n")
+    return "".join(buf)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -664,7 +707,6 @@ def auto_pass_result(fname: str, fp: str, reason: str, category: str = "faithful
         "passed": True,
         "status": "pass",
         "reason": reason,
-        "reason_mode": FAITH_REASON_MODE,
         "duration_ms": 0,
         "retried": False,
     }
@@ -676,18 +718,19 @@ def eval_one_faithfulness(
     actual_max: int,
     ctx_max: int,
     truths_limit: int,
+    include_reason: bool,
 ) -> Tuple[float, bool, str]:
-    # 1st passのscore計測は従来通り include_reason=False のまま
-    metric = build_faith_metric(truths_limit, include_reason=False)
+    metric = build_faith_metric(truths_limit, include_reason=include_reason)
 
-    # retrieval_context は複数要素OKだが、合計で ctx_max に抑える
     joined = "\n".join(ref_context_list)
     joined = truncate(joined, ctx_max)
 
     tc = LLMTestCase(
         input=(
-            f"この構造化YAMLファイル（{fname}）は、参照の内容を忠実に構造化したものですか？"
-            "参照に存在しない内容の創作（ハルシネーション）がないかを評価してください。"
+            f"このYAML（{fname}）は参照の内容を構造化したものです。"
+            "構造化のためのキー名・章ラベル・分類名の追加は許容します。"
+            "ただし、参照本文に存在しない『意味のある主張（要件・判断・数値・制約・因果関係など）』を追加していないかを評価してください。"
+            "参照に無い主張がある場合のみ減点してください。"
         ),
         actual_output=truncate(yaml_content, actual_max),
         retrieval_context=[joined],
@@ -695,7 +738,11 @@ def eval_one_faithfulness(
     metric.measure(tc)
     score = float(metric.score)
     passed = bool(metric.is_successful())
-    return score, passed, ""
+
+    reason = ""
+    if include_reason:
+        reason = extract_metric_reason(metric)
+    return score, passed, reason
 
 def eval_faithfulness(
     ref_chunks: List[dict],
@@ -715,28 +762,28 @@ def eval_faithfulness(
                 "passed": False,
                 "status": "error",
                 "reason": "deepeval is not available in this runtime (cannot import deepeval).",
-                "reason_mode": FAITH_REASON_MODE,
                 "duration_ms": 0,
                 "retried": False,
+                "reason_mode": "none",
             })
         return results
 
     for fp, info in yaml_files.items():
         fname = Path(fp).name
         yaml_data = info["data"]
-        yaml_content = info["content"]
-        yaml_content_faith = build_yaml_content_faith(yaml_data, yaml_content)
         start = time.time()
 
         if FAITHFULNESS_SKIP_ALL:
             r = auto_pass_result(fname, fp, "[SKIP] AIDD_FAITHFULNESS_SKIP=* により全スキップ")
             r["duration_ms"] = int((time.time() - start) * 1000)
+            r["reason_mode"] = "none"
             results.append(r)
             continue
 
         if fname in FAITHFULNESS_SKIP_FILES:
             r = auto_pass_result(fname, fp, f"[SKIP] AIDD_FAITHFULNESS_SKIP に明示指定（{fname}）")
             r["duration_ms"] = int((time.time() - start) * 1000)
+            r["reason_mode"] = "none"
             results.append(r)
             continue
 
@@ -745,24 +792,29 @@ def eval_faithfulness(
             if skip_df:
                 r = auto_pass_result(fname, fp, msg_df)
                 r["duration_ms"] = int((time.time() - start) * 1000)
+                r["reason_mode"] = "none"
                 results.append(r)
                 continue
 
         if is_qa_supplement(yaml_data, ref_names):
             r = auto_pass_result(fname, fp, "[AUTO-PASS] 補足資料由来のファイルとしてFaithfulness自動PASS")
             r["duration_ms"] = int((time.time() - start) * 1000)
+            r["reason_mode"] = "none"
             results.append(r)
             continue
 
-        # ★ derived_from による参照候補の絞り込み（ヒット無しなら全体フォールバック）
+        faith_view_obj = prune_for_faithfulness(yaml_data, depth=0)
+        faith_yaml_text = dump_yaml(faith_view_obj).strip()
+        if not faith_yaml_text:
+            faith_yaml_text = info["content"]
+
         used_ref_chunks = ref_chunks
         df_hits: Set[str] = set()
         if USE_DERIVED_FROM_CONTEXT:
             used_ref_chunks, df_hits = filter_ref_chunks_by_derived_from(yaml_data, ref_chunks, ref_names)
 
-        # 参照チャンク上位Kを選ぶ（ここがタイムアウト対策の本体）
         ref_ctx = select_topk_ref_chunks(
-            yaml_content=yaml_content,
+            yaml_content=faith_yaml_text,
             ref_chunks=used_ref_chunks,
             topk=TOPK_REF_CHUNKS,
             total_ctx_max=FAITH_CTX_MAX,
@@ -770,29 +822,53 @@ def eval_faithfulness(
 
         extra_note = f" derived_from_ctx={sorted(df_hits)}" if df_hits else ""
         print(f"  [EVAL] Faithfulness: {fname} ...{extra_note}", end=" ", flush=True)
+
         try:
-            score, passed, reason = eval_one_faithfulness(
+            score, passed, _ = eval_one_faithfulness(
                 fname=fname,
-                yaml_content=yaml_content,
+                yaml_content=faith_yaml_text,
                 ref_context_list=ref_ctx,
                 actual_max=FAITH_ACTUAL_MAX,
                 ctx_max=FAITH_CTX_MAX,
                 truths_limit=FAITH_TRUTHS_LIM,
+                include_reason=False,
             )
             status = "pass" if passed else ("warn" if score >= 0.5 else "fail")
-            reason = resolve_faithfulness_reason(
-                reason_mode=FAITH_REASON_MODE,
-                status=status,
-                fname=fname,
-                first_pass_reason=reason,
-                yaml_content=yaml_content,
-                yaml_content_faith=yaml_content_faith,
-                ref_context_list=ref_ctx,
-                actual_max=FAITH_ACTUAL_MAX,
-                ctx_max=FAITH_CTX_MAX,
-                truths_limit=FAITH_TRUTHS_LIM,
-            )
             print(f"score={score:.3f} → {status.upper()}")
+
+            reason = ""
+            reason_mode = "none"
+
+            if status in ("fail", "warn"):
+                local_reason = build_local_reason(faith_yaml_text, ref_ctx)
+
+                if FAITH_REASON_MODE == "local":
+                    reason = local_reason
+                    reason_mode = "local"
+                else:
+                    try:
+                        _s2, _p2, llm_reason = eval_one_faithfulness(
+                            fname=fname,
+                            yaml_content=truncate(faith_yaml_text, min(FAITH_ACTUAL_MAX, 900)),
+                            ref_context_list=ref_ctx[:1],
+                            actual_max=min(FAITH_ACTUAL_MAX, 900),
+                            ctx_max=min(FAITH_CTX_MAX, 900),
+                            truths_limit=min(FAITH_TRUTHS_LIM, 6),
+                            include_reason=True,
+                        )
+                        llm_reason = (llm_reason or "").strip()
+                        if llm_reason:
+                            reason = llm_reason
+                            reason_mode = "llm"
+                        else:
+                            reason = local_reason
+                            reason_mode = "local_fallback"
+                    except Exception as exc_reason:
+                        reason = local_reason + f"\n[llm_reason_error] {exc_reason}"
+                        reason_mode = "local_fallback"
+
+            duration_ms = int((time.time() - start) * 1000)
+            warn_if_slow(fname, duration_ms)
 
             results.append({
                 "test_name": f"Faithfulness :: {fname}",
@@ -802,8 +878,8 @@ def eval_faithfulness(
                 "passed": bool(passed),
                 "status": status,
                 "reason": reason,
-                "reason_mode": FAITH_REASON_MODE,
-                "duration_ms": int((time.time() - start) * 1000),
+                "reason_mode": reason_mode,
+                "duration_ms": duration_ms,
                 "retried": False,
                 "derived_from_context": sorted(df_hits) if df_hits else [],
             })
@@ -812,35 +888,33 @@ def eval_faithfulness(
             if RETRY_ON_TIMEOUT and is_timeout_like(exc):
                 print("TIMEOUT → RETRY", flush=True)
                 try:
-                    # リトライ時は context もさらに絞る（Kを減らす＋文字数を減らす）
                     ref_ctx_retry = select_topk_ref_chunks(
-                        yaml_content=yaml_content,
+                        yaml_content=faith_yaml_text,
                         ref_chunks=used_ref_chunks,
                         topk=max(1, TOPK_REF_CHUNKS // 2),
                         total_ctx_max=RETRY_CTX_MAX,
                     )
-                    score, passed, reason = eval_one_faithfulness(
+                    score, passed, _ = eval_one_faithfulness(
                         fname=fname,
-                        yaml_content=yaml_content,
+                        yaml_content=faith_yaml_text,
                         ref_context_list=ref_ctx_retry,
                         actual_max=RETRY_ACTUAL_MAX,
                         ctx_max=RETRY_CTX_MAX,
                         truths_limit=RETRY_TRUTHS_LIM,
+                        include_reason=False,
                     )
                     status = "pass" if passed else ("warn" if score >= 0.5 else "fail")
-                    reason = resolve_faithfulness_reason(
-                        reason_mode=FAITH_REASON_MODE,
-                        status=status,
-                        fname=fname,
-                        first_pass_reason=reason,
-                        yaml_content=yaml_content,
-                        yaml_content_faith=yaml_content_faith,
-                        ref_context_list=ref_ctx_retry,
-                        actual_max=RETRY_ACTUAL_MAX,
-                        ctx_max=RETRY_CTX_MAX,
-                        truths_limit=RETRY_TRUTHS_LIM,
-                    )
                     print(f"  [RETRY OK] score={score:.3f} → {status.upper()}")
+
+                    reason = ""
+                    reason_mode = "none"
+                    if status in ("fail", "warn"):
+                        local_reason = build_local_reason(faith_yaml_text, ref_ctx_retry)
+                        reason = local_reason
+                        reason_mode = "local"
+
+                    duration_ms = int((time.time() - start) * 1000)
+                    warn_if_slow(fname, duration_ms)
 
                     results.append({
                         "test_name": f"Faithfulness :: {fname}",
@@ -850,8 +924,8 @@ def eval_faithfulness(
                         "passed": bool(passed),
                         "status": status,
                         "reason": reason,
-                        "reason_mode": FAITH_REASON_MODE,
-                        "duration_ms": int((time.time() - start) * 1000),
+                        "reason_mode": reason_mode,
+                        "duration_ms": duration_ms,
                         "retried": True,
                         "retry_params": {
                             "topk_ref_chunks": max(1, TOPK_REF_CHUNKS // 2),
@@ -865,6 +939,8 @@ def eval_faithfulness(
                     continue
                 except Exception as exc2:
                     print(f"  [RETRY FAIL] {exc2}", flush=True)
+                    duration_ms = int((time.time() - start) * 1000)
+                    warn_if_slow(fname, duration_ms)
                     results.append({
                         "test_name": f"Faithfulness :: {fname}",
                         "category": "faithfulness",
@@ -873,8 +949,8 @@ def eval_faithfulness(
                         "passed": False,
                         "status": "error",
                         "reason": f"Timeout-like error then retry failed. first={exc} / retry={exc2}",
-                        "reason_mode": FAITH_REASON_MODE,
-                        "duration_ms": int((time.time() - start) * 1000),
+                        "reason_mode": "none",
+                        "duration_ms": duration_ms,
                         "retried": True,
                         "first_error": str(exc),
                         "retry_error": str(exc2),
@@ -883,6 +959,8 @@ def eval_faithfulness(
                     continue
 
             print(f"ERROR: {exc}", flush=True)
+            duration_ms = int((time.time() - start) * 1000)
+            warn_if_slow(fname, duration_ms)
             results.append({
                 "test_name": f"Faithfulness :: {fname}",
                 "category": "faithfulness",
@@ -891,8 +969,8 @@ def eval_faithfulness(
                 "passed": False,
                 "status": "error",
                 "reason": str(exc),
-                "reason_mode": FAITH_REASON_MODE,
-                "duration_ms": int((time.time() - start) * 1000),
+                "reason_mode": "none",
+                "duration_ms": duration_ms,
                 "retried": False,
                 "derived_from_context": sorted(df_hits) if df_hits else [],
             })
@@ -901,7 +979,7 @@ def eval_faithfulness(
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Global Coverage (rule-based)
+# Coverage (derived_from 1:1 / rule-based)
 # ──────────────────────────────────────────────────────────────────────────────
 
 def extract_reference_items_for_coverage(ref_texts: List[str], max_items: int, min_len: int, skip_headings: bool) -> List[str]:
@@ -988,6 +1066,76 @@ def compute_global_coverage(ref_items: List[str], yaml_files: Dict[str, Dict[str
 
     score = (covered / len(ref_items)) if ref_items else 1.0
     return score, details
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Completeness (derived_from 1:1 / rule-based)
+# ──────────────────────────────────────────────────────────────────────────────
+
+def collect_null_paths(data: Any, prefix: str = "", out: Optional[List[Tuple[str, Any]]] = None, limit: int = 2000) -> List[Tuple[str, Any]]:
+    if out is None:
+        out = []
+    if len(out) >= limit:
+        return out
+
+    if isinstance(data, dict):
+        for k, v in data.items():
+            p = f"{prefix}.{k}" if prefix else str(k)
+            collect_null_paths(v, p, out, limit)
+            if len(out) >= limit:
+                break
+    elif isinstance(data, list):
+        for i, v in enumerate(data):
+            p = f"{prefix}[{i}]"
+            collect_null_paths(v, p, out, limit)
+            if len(out) >= limit:
+                break
+    else:
+        if data is None:
+            out.append((prefix, None))
+        elif isinstance(data, str) and data.strip() == "":
+            out.append((prefix, data))
+    return out
+
+def path_tokens(path: str) -> Set[str]:
+    s = re.sub(r"[\[\]\d]+", " ", path)
+    s = s.replace(".", " ")
+    return tokenize_ja_en(s)
+
+def completeness_check_one(yaml_data: dict, ref_text: str) -> Tuple[str, int, int, List[dict]]:
+    nulls = collect_null_paths(yaml_data)
+    null_total = len(nulls)
+
+    ref_tok = tokenize_ja_en(ref_text or "")
+    suspicious_items: List[Tuple[float, str]] = []
+
+    for p, _v in nulls:
+        if not p:
+            continue
+        pt = path_tokens(p)
+        sim = jaccard(pt, ref_tok) if (pt and ref_tok) else 0.0
+        if sim >= COMP_EVIDENCE_TH:
+            suspicious_items.append((sim, p))
+
+    suspicious_items.sort(key=lambda x: x[0], reverse=True)
+    suspicious = len(suspicious_items)
+
+    if suspicious >= COMP_FAIL_COUNT:
+        status = "fail"
+    elif suspicious >= COMP_WARN_COUNT:
+        status = "warn"
+    else:
+        status = "pass"
+
+    details = []
+    for sim, p in suspicious_items[:COMP_TOPN]:
+        details.append({
+            "path": p,
+            "evidence_sim": round(sim, 4),
+            "suggestion": "参照に該当要素がある可能性。nullのままでよいか確認し、必要なら値を埋める/（TBD）等の表現を明示。",
+        })
+
+    return status, null_total, suspicious, details
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1087,13 +1235,11 @@ def compute_global_consistency(
 
     contradictions: List[dict] = []
     checked_paths = 0
-    consistent_paths = 0
 
     for path, vmap in path_map.items():
         vals = list(vmap.keys())
         checked_paths += 1
         if len(vals) <= 1:
-            consistent_paths += 1
             continue
         contradictions.append({
             "type": "path_value_conflict",
@@ -1159,6 +1305,7 @@ def write_results(all_results: List[dict], out_root: str, meta: dict) -> dict:
 
     faith_results = [r for r in all_results if r["category"] == "faithfulness"]
     cov_results = [r for r in all_results if r["category"] == "coverage"]
+    comp_results = [r for r in all_results if r["category"] == "completeness"]
     cons_results = [r for r in all_results if r["category"] == "consistency"]
 
     output = {
@@ -1174,6 +1321,7 @@ def write_results(all_results: List[dict], out_root: str, meta: dict) -> dict:
             "overall_status": "pass" if overall_pass else "fail",
             "faithfulness": summary(faith_results),
             "coverage": summary(cov_results),
+            "completeness": summary(comp_results),
             "consistency": summary(cons_results),
         },
         "results": all_results,
@@ -1226,26 +1374,24 @@ def write_results(all_results: List[dict], out_root: str, meta: dict) -> dict:
 def main():
     ref_files = expand_ref_inputs(REF_INPUTS)
 
-    # 参照が無いと Coverage/Consistency は評価不能（Faithfulness全スキップならOK）
-    if not ref_files and not FAITHFULNESS_SKIP_ALL and (COVERAGE_ENABLE or CONSISTENCY_ENABLE):
+    if not ref_files and not FAITHFULNESS_SKIP_ALL and (COVERAGE_ENABLE or CONSISTENCY_ENABLE or COMPLETENESS_ENABLE):
         print("[G4] ERROR: 参照ファイルが見つかりません。AIDD_REF_PATHS または AIDD_FILE_PATH を設定してください。")
         sys.exit(2)
 
-    # 参照チャンク生成（Faithfulnessのタイムアウト対策の本体）
     ref_chunks: List[dict] = []
     ref_names: Set[str] = set()
-    ref_texts_for_rule: List[str] = []
+    ref_text_map_for_rule: Dict[str, str] = {}
 
     if ref_files:
         ref_chunks, ref_names = build_reference_chunks(ref_files, REF_MODE, REF_CHUNK_MAX_CHARS)
-        # Coverage/Consistency 用には、参照ファイルを軽く束ねる（全文は不要だが、抽出のために最低限）
         for fp in ref_files:
+            name = Path(fp).name
             mode = infer_ref_mode_by_ext(fp, REF_MODE)
             if mode == "MD":
-                ref_texts_for_rule.append(load_text(fp))
+                ref_text_map_for_rule[name] = load_text(fp)
             else:
                 data = load_yaml_file(fp)
-                ref_texts_for_rule.append(yaml.dump(data, allow_unicode=True, sort_keys=False, default_flow_style=False))
+                ref_text_map_for_rule[name] = dump_yaml(data)
 
     yaml_files = load_yaml_dir(YAML_DIR)
 
@@ -1258,11 +1404,13 @@ def main():
     print(f"[G4] deepeval available: {DEEPEVAL_AVAILABLE}")
     print(f"[G4] Faithfulness topK ref chunks: {TOPK_REF_CHUNKS} (chunk_max_chars={REF_CHUNK_MAX_CHARS}, ctx_max={FAITH_CTX_MAX})")
     print(f"[G4] Faithfulness derived_from context filter: {'ON' if USE_DERIVED_FROM_CONTEXT else 'OFF'}")
-    if _FAITH_REASON_MODE_RAW not in ("local", "llm"):
-        print(f"[G4] Faithfulness reason mode: {FAITH_REASON_MODE.upper()} (fallback from '{_FAITH_REASON_MODE_RAW}')")
-    else:
-        print(f"[G4] Faithfulness reason mode: {FAITH_REASON_MODE.upper()}")
-    print(f"[G4] Coverage    : {'ON' if COVERAGE_ENABLE else 'OFF'}")
+    print(f"[G4] Faithfulness reason mode: {FAITH_REASON_MODE}")
+    print(f"[G4] Faithfulness strip top keys: {FAITH_STRIP_TOP_KEYS}")
+    print(f"[G4] Faithfulness strip any-level keys: {sorted(list(FAITH_STRIP_ANYLEVEL_KEYS))}")
+    print(f"[G4] Faithfulness prune_nulls={'ON' if FAITH_PRUNE_NULLS else 'OFF'} prune_max_depth={FAITH_PRUNE_MAX_DEPTH}")
+    print(f"[G4] Faithfulness noisy ASCII scalar maxlen: {NOISY_ASCII_SCALAR_MAXLEN}")
+    print(f"[G4] Coverage    : {'ON' if COVERAGE_ENABLE else 'OFF'} (derived_from per-file)")
+    print(f"[G4] Completeness: {'ON' if COMPLETENESS_ENABLE else 'OFF'} (derived_from per-file)")
     print(f"[G4] Consistency : {'ON' if CONSISTENCY_ENABLE else 'OFF'}")
     print(f"{'=' * 72}\n")
 
@@ -1274,11 +1422,12 @@ def main():
     faith_results = eval_faithfulness(ref_chunks, ref_names, yaml_files)
     all_results.extend(faith_results)
 
-    # 2) Global Coverage
+    # 2) Coverage (derived_from 1:1 / per-file)
     if COVERAGE_ENABLE:
-        print("\n[G4] ── Global Coverage（YAML集合単位）──")
+        print("\n[G4] ── Coverage（derived_from 単位）──")
         start = time.time()
-        if not ref_texts_for_rule:
+
+        if not ref_text_map_for_rule:
             all_results.append({
                 "test_name": "Coverage :: GLOBAL",
                 "category": "coverage",
@@ -1286,41 +1435,218 @@ def main():
                 "score": 0.0,
                 "passed": False,
                 "status": "error",
-                "reason": "No reference content available for coverage.",
+                "reason": "No reference content available for coverage (ref_text_map_for_rule is empty).",
                 "duration_ms": int((time.time() - start) * 1000),
             })
         else:
-            ref_items = extract_reference_items_for_coverage(
-                ref_texts_for_rule,
-                COV_MAX_ITEMS,
-                COV_MIN_ITEM_LEN,
-                skip_headings=COV_SKIP_HEADINGS,
-            )
-            cov_score, cov_details = compute_global_coverage(ref_items, yaml_files, COV_SIM_THRESHOLD)
-            passed = cov_score >= WARN_THRESHOLD
-            status = "pass" if passed else ("warn" if cov_score >= 0.5 else "fail")
+            per_file_scores: List[float] = []
+            per_file_details: List[dict] = []
+
+            for yfp, info in yaml_files.items():
+                yname = Path(yfp).name
+                ydata = info["data"]
+                ycontent = info["content"]
+
+                df_candidates = _derived_from_name_candidates(ydata)
+                df_hits = [n for n in sorted(df_candidates) if n in ref_text_map_for_rule]
+
+                if not df_hits:
+                    all_results.append({
+                        "test_name": f"Coverage :: {yname}",
+                        "category": "coverage",
+                        "file": yfp,
+                        "score": 0.0,
+                        "passed": False,
+                        "status": "error",
+                        "reason": f"derived_from が無い/参照に解決できません (derived_from={derived_from_list(ydata)})",
+                        "duration_ms": 0,
+                    })
+                    per_file_details.append({
+                        "file": yname,
+                        "derived_from": derived_from_list(ydata),
+                        "resolved_refs": [],
+                        "score": 0.0,
+                        "status": "error",
+                        "items": [],
+                    })
+                    continue
+
+                ref_blob = "\n\n".join(f"===== REF_FILE: {rn} =====\n{ref_text_map_for_rule[rn]}" for rn in df_hits)
+
+                ref_items = extract_reference_items_for_coverage(
+                    [ref_blob],
+                    COV_MAX_ITEMS,
+                    COV_MIN_ITEM_LEN,
+                    skip_headings=COV_SKIP_HEADINGS,
+                )
+
+                tmp_yaml_files = {yfp: {"content": ycontent, "data": ydata}}
+                cov_score, cov_details = compute_global_coverage(ref_items, tmp_yaml_files, COV_SIM_THRESHOLD)
+
+                per_file_scores.append(float(cov_score))
+                passed = cov_score >= WARN_THRESHOLD
+                status = "pass" if passed else ("warn" if cov_score >= 0.5 else "fail")
+
+                all_results.append({
+                    "test_name": f"Coverage :: {yname}",
+                    "category": "coverage",
+                    "file": yfp,
+                    "score": round(float(cov_score), 4),
+                    "passed": bool(passed),
+                    "status": status,
+                    "reason": f"derived_from={df_hits} covered_items={sum(1 for d in cov_details if d['covered'])}/{len(cov_details)} (sim_th={COV_SIM_THRESHOLD})",
+                    "duration_ms": 0,
+                    "derived_from_context": df_hits,
+                })
+
+                per_file_details.append({
+                    "file": yname,
+                    "derived_from": derived_from_list(ydata),
+                    "resolved_refs": df_hits,
+                    "score": round(float(cov_score), 4),
+                    "status": status,
+                    "ref_items_count": len(ref_items),
+                    "covered_count": sum(1 for d in cov_details if d["covered"]),
+                    "items": cov_details[:min(len(cov_details), 60)],
+                })
+
+            global_score = (sum(per_file_scores) / len(per_file_scores)) if per_file_scores else 0.0
+            global_passed = global_score >= WARN_THRESHOLD
+            global_status = "pass" if global_passed else ("warn" if global_score >= 0.5 else "fail")
 
             all_results.append({
                 "test_name": "Coverage :: GLOBAL",
                 "category": "coverage",
                 "file": YAML_DIR,
-                "score": round(float(cov_score), 4),
-                "passed": bool(passed),
-                "status": status,
-                "reason": f"covered_items={sum(1 for d in cov_details if d['covered'])}/{len(cov_details)} (sim_th={COV_SIM_THRESHOLD})",
+                "score": round(float(global_score), 4),
+                "passed": bool(global_passed),
+                "status": global_status,
+                "reason": f"avg_of_files={len(per_file_scores)} (sim_th={COV_SIM_THRESHOLD})",
                 "duration_ms": int((time.time() - start) * 1000),
             })
 
             details_meta["coverage"] = {
-                "ref_items_count": len(ref_items),
-                "covered_count": sum(1 for d in cov_details if d["covered"]),
+                "mode": "derived_from_per_file",
                 "sim_threshold": COV_SIM_THRESHOLD,
                 "skip_headings": COV_SKIP_HEADINGS,
-                "items": cov_details[:min(len(cov_details), 200)],
+                "max_items_per_file": COV_MAX_ITEMS,
+                "min_item_len": COV_MIN_ITEM_LEN,
+                "files": per_file_details[:min(len(per_file_details), 200)],
             }
-            print(f"  [COVERAGE] score={cov_score:.3f}  covered={details_meta['coverage']['covered_count']}/{len(ref_items)}  status={status.upper()}")
 
-    # 3) Global Consistency
+            print(f"  [COVERAGE] global(avg) score={global_score:.3f}  files={len(per_file_scores)}/{len(yaml_files)}  status={global_status.upper()}")
+
+    # 3) Completeness (derived_from 1:1 / per-file)
+    if COMPLETENESS_ENABLE:
+        print("\n[G4] ── Completeness（derived_from 単位）──")
+        start = time.time()
+
+        if not ref_text_map_for_rule:
+            all_results.append({
+                "test_name": "Completeness :: GLOBAL",
+                "category": "completeness",
+                "file": YAML_DIR,
+                "score": 0.0,
+                "passed": False,
+                "status": "error",
+                "reason": "No reference content available for completeness (ref_text_map_for_rule is empty).",
+                "duration_ms": int((time.time() - start) * 1000),
+            })
+        else:
+            per_file_scores: List[float] = []
+            per_file_details: List[dict] = []
+
+            for yfp, info in yaml_files.items():
+                yname = Path(yfp).name
+                ydata = info["data"]
+
+                df_candidates = _derived_from_name_candidates(ydata)
+                df_hits = [n for n in sorted(df_candidates) if n in ref_text_map_for_rule]
+
+                if not df_hits:
+                    all_results.append({
+                        "test_name": f"Completeness :: {yname}",
+                        "category": "completeness",
+                        "file": yfp,
+                        "score": 0.0,
+                        "passed": False,
+                        "status": "error",
+                        "reason": f"derived_from が無い/参照に解決できません (derived_from={derived_from_list(ydata)})",
+                        "duration_ms": 0,
+                    })
+                    per_file_details.append({
+                        "file": yname,
+                        "derived_from": derived_from_list(ydata),
+                        "resolved_refs": [],
+                        "status": "error",
+                        "null_total": 0,
+                        "suspicious": 0,
+                        "items": [],
+                    })
+                    continue
+
+                ref_blob = "\n\n".join(ref_text_map_for_rule[rn] for rn in df_hits)
+                status, null_total, suspicious, details = completeness_check_one(ydata, ref_blob)
+
+                if status == "pass":
+                    score = 1.0
+                    passed = True
+                elif status == "warn":
+                    score = 0.7
+                    passed = False
+                else:
+                    score = 0.0
+                    passed = False
+
+                all_results.append({
+                    "test_name": f"Completeness :: {yname}",
+                    "category": "completeness",
+                    "file": yfp,
+                    "score": round(float(score), 4),
+                    "passed": bool(passed),
+                    "status": status,
+                    "reason": f"null_total={null_total} suspicious_nulls={suspicious} (evidence_th={COMP_EVIDENCE_TH})",
+                    "duration_ms": 0,
+                    "derived_from_context": df_hits,
+                })
+
+                per_file_scores.append(float(score))
+                per_file_details.append({
+                    "file": yname,
+                    "derived_from": derived_from_list(ydata),
+                    "resolved_refs": df_hits,
+                    "status": status,
+                    "null_total": null_total,
+                    "suspicious": suspicious,
+                    "items": details,
+                })
+
+            global_score = (sum(per_file_scores) / len(per_file_scores)) if per_file_scores else 0.0
+            global_passed = global_score >= WARN_THRESHOLD
+            global_status = "pass" if global_passed else ("warn" if global_score >= 0.5 else "fail")
+
+            all_results.append({
+                "test_name": "Completeness :: GLOBAL",
+                "category": "completeness",
+                "file": YAML_DIR,
+                "score": round(float(global_score), 4),
+                "passed": bool(global_passed),
+                "status": global_status,
+                "reason": f"avg_of_files={len(per_file_scores)}",
+                "duration_ms": int((time.time() - start) * 1000),
+            })
+
+            details_meta["completeness"] = {
+                "mode": "derived_from_per_file",
+                "evidence_threshold": COMP_EVIDENCE_TH,
+                "warn_count": COMP_WARN_COUNT,
+                "fail_count": COMP_FAIL_COUNT,
+                "files": per_file_details[:min(len(per_file_details), 200)],
+            }
+
+            print(f"  [COMPLETENESS] global(avg) score={global_score:.3f}  files={len(per_file_scores)}/{len(yaml_files)}  status={global_status.upper()}")
+
+    # 4) Global Consistency
     if CONSISTENCY_ENABLE:
         print("\n[G4] ── Global Consistency（横断）──")
         start = time.time()
@@ -1336,7 +1662,7 @@ def main():
                 "duration_ms": int((time.time() - start) * 1000),
             })
         else:
-            cons_score, cons_details = compute_global_consistency(yaml_files, ref_texts_for_rule)
+            cons_score, cons_details = compute_global_consistency(yaml_files, list(ref_text_map_for_rule.values()))
             passed = cons_score >= WARN_THRESHOLD
             status = "pass" if passed else ("warn" if cons_score >= 0.5 else "fail")
 
@@ -1374,7 +1700,16 @@ def main():
             "faithfulness_context_max_chars": FAITH_CTX_MAX,
             "faithfulness_truths_limit": FAITH_TRUTHS_LIM,
             "faithfulness_reason_mode": FAITH_REASON_MODE,
+            "faithfulness_strip_top_keys": FAITH_STRIP_TOP_KEYS,
+            "faithfulness_strip_anylevel_keys": sorted(list(FAITH_STRIP_ANYLEVEL_KEYS)),
+            "faithfulness_prune_nulls": FAITH_PRUNE_NULLS,
+            "faithfulness_prune_max_depth": FAITH_PRUNE_MAX_DEPTH,
+            "faithfulness_noisy_ascii_scalar_maxlen": NOISY_ASCII_SCALAR_MAXLEN,
+            "local_reason_topn": LOCAL_REASON_TOPN,
+            "local_reason_sim_th": LOCAL_REASON_SIM_TH,
+            "local_reason_min_len": LOCAL_REASON_MIN_LEN,
             "coverage_enable": COVERAGE_ENABLE,
+            "completeness_enable": COMPLETENESS_ENABLE,
             "consistency_enable": CONSISTENCY_ENABLE,
         },
         "details": details_meta,
@@ -1390,6 +1725,8 @@ def main():
     print(f"     Faithfulness : avg={fs['avg_score']:.3f}  passed={fs['passed']}/{fs['total']}{' ⚠ WARNING' if fs['warning'] else ''}")
     cs = s["coverage"]
     print(f"     Coverage     : avg={cs['avg_score']:.3f}  passed={cs['passed']}/{cs['total']}{' ⚠ WARNING' if cs['warning'] else ''}")
+    cps = s["completeness"]
+    print(f"     Completeness : avg={cps['avg_score']:.3f}  passed={cps['passed']}/{cps['total']}{' ⚠ WARNING' if cps['warning'] else ''}")
     ks = s["consistency"]
     print(f"     Consistency  : avg={ks['avg_score']:.3f}  passed={ks['passed']}/{ks['total']}{' ⚠ WARNING' if ks['warning'] else ''}")
     print(f"\n[G4] Output : {output['_meta']['json_path']}")

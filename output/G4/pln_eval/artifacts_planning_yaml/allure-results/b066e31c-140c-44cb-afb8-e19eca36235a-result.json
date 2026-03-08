@@ -1,0 +1,42 @@
+{
+  "uuid": "b066e31c-140c-44cb-afb8-e19eca36235a",
+  "name": "Faithfulness :: PLN-PLN-SOLUTION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772898203035,
+  "stop": 1772898685404,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.2128"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "local reason: 根拠薄い候補 top5 (line-vs-ref Jaccard)\n- L41 sim=0.011 [断定語]: - Coachの出力や企画/要件/設計のYAML等\n- L47 sim=0.055 [断定語]: - 出力はAllureに集約し、品質の可視化ハブにする（自動ゲート結果＋人の判断ログ＋ダッシュボード添付）\n- L3 sim=0.000: に構造化した。\n- L4 sim=0.000: changes: null\n- L5 sim=0.000: ssot_note: null\n対処提案: 根拠が必要な断定は参照MDへ逆輸入するか、根拠未確定ならYAML表現を「（案）」へ落として断定を避けてください。",
+  "steps": []
+}

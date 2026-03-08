@@ -1,0 +1,42 @@
+{
+  "uuid": "af47c676-f2b8-48d6-896a-b4228a0948b0",
+  "name": "Faithfulness :: PLN-PLN-BACKGROUND-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899778329,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.5"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) rationale: 『1. 背景と課題（Why Now）』の列挙を、課題の種類・根本原因・導入視点に分けて problem に構造化した。\n- (sim=0.000) artifact_kind: problem\n- (sim=0.000) primary_section: 1. 背景と課題（Why Now）\n- (sim=0.000) structural_problems:\n- (sim=0.000) root_causes:\n- (sim=0.000) introduction_viewpoints:\n- (sim=0.000) direction: 企画段階から工程パックで導入\n- (sim=0.021) - topic: 品質の不可視性\n- (sim=0.021) - topic: 仕様の曖昧性\n- (sim=0.021) - topic: 仕様と実装の乖離\n- (sim=0.021) - topic: QA観点の属人化\n- (sim=0.021) - topic: 判断根拠の不在\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

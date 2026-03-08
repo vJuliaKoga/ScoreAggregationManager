@@ -18,10 +18,18 @@ meta:
 
 ### 15.1 checklistresults.json（Coach出力）
 
-- `checkedby` / `timestamp` / `status(Done|Abort)` / `reason` / `evidencerefs` を保持し、G2が検証する
+保持フィールド：
+
+- checkedby
+- timestamp
+- status(Done|Abort)
+- reason
+- evidencerefs
+
+G2がこれらのフィールドを検証する。
 
 ### 15.2 Gate出力（Runner）
 
-- `output/` に各ゲートのレポートJSON＋サマリ（exitcode含む）
-- `allure-results/` を生成してレポートに統合
+- output/ の内容：各ゲートのレポートJSON＋サマリ（exitcode含む）
+- allure-results/ の内容：レポートに統合するための出力（Allure用）
 

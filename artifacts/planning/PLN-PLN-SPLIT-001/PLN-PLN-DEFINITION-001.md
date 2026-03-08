@@ -24,6 +24,17 @@ meta:
 本企画の実装：
 
 - 正しく指示：構造化テンプレ、曖昧語排除チェック
+  - 曖昧語排除チェック
+  - 構造化テンプレート
 - 遵守確認：JSON Schema検証、Deep Eval評価、構造一貫性テスト
+  - JSON Schema検証
+  - Deep Eval評価
+  - 構造一貫性テスト
 - 品質可視化：Allure Reportでゲート結果をモニタ
+
+定義の対応：
+
+- definition: 正しく指示 → AIに正しく指示を与える
+- definition: 遵守確認 → 指示が守られていることを確認する
+- definition: 品質可視化 → Allure Reportでゲート結果をモニタ
 

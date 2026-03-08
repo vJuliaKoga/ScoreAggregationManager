@@ -1,0 +1,42 @@
+{
+  "uuid": "0d636c00-2626-4b18-8185-b383806a1f27",
+  "name": "Faithfulness :: PLN-PLN-IDISSUANCE-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899769805,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.4286"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=11 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) artifact_kind: id_issuer\n- (sim=0.000) id_issuer:\n- (sim=0.000) functions:\n- (sim=0.000) operation_assumption:\n- (sim=0.000) id_issuer に整理した。\n- (sim=0.030) primary_section: 13. ID発行・管理（同梱ツールとして明記）\n- (sim=0.031) name: issue_id.py\n- (sim=0.032) - stdoutへ発行ID出力（他ツール連携を想定）\n- (sim=0.048) - レジストリの next_nnn 更新\n- (sim=0.078) - 現状は single-user 前提（ロックなし）で運用開始\n- (sim=0.086) rationale: 見出し『13. ID発行・管理（同梱ツールとして明記）』から、issue_id.py の機能要点と運用前提（single-user）を抽出し\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

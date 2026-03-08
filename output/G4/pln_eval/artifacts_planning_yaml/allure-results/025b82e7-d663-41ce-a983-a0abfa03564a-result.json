@@ -1,0 +1,42 @@
+{
+  "uuid": "025b82e7-d663-41ce-a983-a0abfa03564a",
+  "name": "Coverage :: PLN-PLN-ROADMAP-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899759191,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-ROADMAP-001.md'] covered_items=0/0 (sim_th=0.25)",
+  "steps": []
+}

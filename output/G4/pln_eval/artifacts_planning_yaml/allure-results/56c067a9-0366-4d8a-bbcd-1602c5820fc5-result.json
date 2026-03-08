@@ -1,0 +1,42 @@
+{
+  "uuid": "56c067a9-0366-4d8a-bbcd-1602c5820fc5",
+  "name": "Coverage :: PLN-PLN-IDCONVENTION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772899759191,
+  "stop": 1772899759191,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-IDCONVENTION-001.md'] covered_items=0/3 (sim_th=0.25)",
+  "steps": []
+}

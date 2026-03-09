@@ -1,0 +1,42 @@
+{
+  "uuid": "93bae776-505b-4d2e-9659-2d8f292daa8b",
+  "name": "Faithfulness :: PLN-PLN-BACKGROUND-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772953039174,
+  "stop": 1772953066518,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) direction: 企画段階から工程パックで導入\n- (sim=0.021) - topic: 品質の不可視性\n- (sim=0.021) - topic: 仕様の曖昧性\n- (sim=0.021) - topic: 仕様と実装の乖離\n- (sim=0.021) - topic: QA観点の属人化\n- (sim=0.021) - topic: 判断根拠の不在\n- (sim=0.021) note: QA実施の有無は分かっても中身が見えない\n- (sim=0.021) - issue: QA観点の属人化\n- (sim=0.021) direction: CheckFlowでチュートリアル化\n- (sim=0.021) - issue: 品質観点の後回し\n- (sim=0.021) - issue: 責任の不明確化\n- (sim=0.022) - 構造化されていない知識\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:04+09:00'
   model: gpt-5.2
   content_hash: 36fa15c29adb1ff9a118369fa0a1033f1ffc50e29955fe02b6eee45434c6eb42
@@ -32,6 +33,10 @@ inspection_design:
     - human_review
     - humanreview
     - 重み付け、判定ロジック
+    - 要件妥当性チェックリストは重み付けと判定ロジックを含めて評価結果を算出する。
+    - 要件妥当性チェックリストの評価は重み付けと判定ロジックに基づいて決定する。
+    - トレーサビリティ観点では要件IDの紐付けと参照整合を確認する。
+    - 運用考慮観点ではログ保全と権限管理が宣言されていることを確認する。
     coverage_topics:
     - 検証可能性
     - AI可読性
@@ -42,8 +47,9 @@ inspection_design:
     name: 企画MD↔企画YAML整合性（PLNパックに搭載）
     notes:
     - 企画文書をYAML化し、構造・ID・metaを検証するゲートを置く
-    - 詳細はPLNパックのチェックリストに反映
-    - planning_v1 の工程パック構成例にも含まれる
+    - 企画MDと企画YAMLの整合性チェックは構造とIDとmetaの整合を検証対象とする。
+    - この整合性チェック項目はPLNパックの標準チェックリストへ反映して運用する。
+    - planningv1の工程パック構成例にも同チェックを組み込んで再利用する。
 config_artifacts: null
 id_issuer: null
 integration: null

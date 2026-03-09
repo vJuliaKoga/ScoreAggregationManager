@@ -1,0 +1,42 @@
+{
+  "uuid": "ed175419-f7a7-4820-b18a-4a5e78fa64fc",
+  "name": "Coverage :: PLN-PLN-TRACEABILITY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970714525,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.5"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-TRACEABILITY-001.md'] covered_items=5/10 (sim_th=0.25)",
+  "steps": []
+}

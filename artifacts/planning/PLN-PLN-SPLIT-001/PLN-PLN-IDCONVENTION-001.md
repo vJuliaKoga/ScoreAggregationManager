@@ -18,9 +18,9 @@ meta:
 
 ### 12.1 ルール（共通）
 
-ID基本形：format: '{PREFIX}-{PHASE}-{PURPOSE}-{NNN}'
+IDの基本形は `{PREFIX}-{PHASE}-{PURPOSE}-{NNN}` という構造である。
 
-- NNN部分：3桁の連番（nnn_digits: 3）
+- NNN部分は3桁の連番で構成する。
 - PREFIX：成果物種別（PLN/REQ/BAS/DET/CHK/PRM/RES/ABT/DEC…）
 - PHASE：工程（PLN/REQ/BAS/DET/OPS…）
 - PURPOSE：用途（GOAL/PROB/SCOPE/CONS/FNC/NFR/DES/EVAL/AMB/YAML…）
@@ -30,4 +30,6 @@ ID基本形：format: '{PREFIX}-{PHASE}-{PURPOSE}-{NNN}'
 本企画書の主張・方針・スコープなども PLN-PLN-{PURPOSE}-NNN としてIDを付与する。
 
 - 例：PLN-PLN-FLW-001 は企画ゴール
-
+- IDフォーマットはPREFIXとPHASEとPURPOSEとNNNの4要素をハイフン連結した形を標準とする。
+- NNNは常に3桁の連番で管理し桁数を固定する。
+- 企画ゴールの例としてPLN-PLN-FLW-001を採用し用途語の意味を識別できるようにする。

@@ -148,6 +148,23 @@ def run_pack(pack_file: Path) -> Tuple[int, List[StepResult]]:
                 bool(s.get("fail_if_abort_without_reason", True)),
                 float(s.get("warn_if_abort_rate_over", 0.3)),
             )
+        elif kind == "md_yaml_paste_guard":
+            # Strictly block YAML-like rows inside Markdown.
+            # This is intentionally simple and conservative.
+            md_targets = [Path(p) for p in (s.get("targets") or [])]
+            violations = []
+            yaml_like = re.compile(r"^\s*-?\s*[A-Za-z_][A-Za-z0-9_\-]*\s*:\s*.+$")
+            for t in md_targets:
+                if not t.exists() or not t.is_file():
+                    continue
+                for i, line in enumerate(t.read_text(encoding="utf-8").splitlines(), start=1):
+                    if yaml_like.match(line):
+                        violations.append({"file": str(t), "line": i, "text": line.strip()[:200]})
+
+            if violations:
+                res = StepResult(sid, "FAIL", {"violations": violations, "violations_count": len(violations)})
+            else:
+                res = StepResult(sid, "PASS", {"violations": [], "violations_count": 0})
         else:
             res = StepResult(sid, "FAIL", {"error": f"unknown kind: {kind}"})
 

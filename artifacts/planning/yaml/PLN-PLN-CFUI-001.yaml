@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T15:30:00+09:00'
   model: gpt-5.2
   content_hash: f85a31a48069b8cd5a575ec6b49c2a13152a7e0a921f530ac535e614eb5ca92d
@@ -21,7 +22,7 @@ scope: null
 constraints: null
 architecture:
   purpose:
-    ui_goal: NotebookLMのような動的展開型マインドマップUIを活用した品質ゲート基盤
+    ui_goal: CheckFlowはNotebookLMのような動的展開型マインドマップUIを活用した品質ゲート基盤である。
     achieves:
     - 工程ごとの品質チェック
     - 承認ログ記録
@@ -33,7 +34,7 @@ architecture:
     concept_name: テンプレート駆動型アプリケーション
     fixed:
     - UIやロジックは固定
-    - 単一エンジンから複数フェーズのアプリを生成
+    - CheckFlowのコンセプトはテンプレート駆動型アプリケーションであり単一エンジンで複数フェーズを生成する。
     parameterized_elements:
     - テキスト / input / button
     - 表示・非表示制御
@@ -216,8 +217,9 @@ architecture:
   parallel_development_dependency:
     with: Gate Runner（Dockerfile自動生成基盤）
     reasons:
-    - G2工程にてCheckFlowが生成する checklistresults.json が Gate Runner の入力として必須
-    - 出力JSONをRunnerが消費・検証するため、データフォーマットの早期確定が両プロジェクトに影響
+    - G2工程でCheckFlowが生成するchecklistresults.jsonはGate Runnerの入力として必須である。
+    - CheckFlowの出力JSONをGate Runnerが消費・検証する構造であるため、データフォーマットの早期確定が両プロジェクトに影響する。
+    - CheckFlowの出力JSONをRunnerが消費・検証する構造のため、データフォーマットの早期確定が両プロジェクトに影響する。
     required_actions:
     - JSON定義仕様の早期確定（企画完了後、要件定義フェーズ冒頭で実施）
     - 両プロジェクト間のデータフォーマット整合確認

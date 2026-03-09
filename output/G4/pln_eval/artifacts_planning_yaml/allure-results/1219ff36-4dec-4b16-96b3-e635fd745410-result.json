@@ -1,0 +1,42 @@
+{
+  "uuid": "1219ff36-4dec-4b16-96b3-e635fd745410",
+  "name": "Faithfulness :: PLN-PLN-SOLUTION-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772969553256,
+  "stop": 1772969574761,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.4762"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.013) - 監査・説明に耐える「判断ログ」を残す\n- (sim=0.013) - タスクはTodoから展開してDoneまたはAbortを選択し次項目を解放する。\n- (sim=0.013) - CheckFlowは視座共有だけでなく人の最終判断をDoneとAbortのログとして残す運用を強制する。\n- (sim=0.013) - 初学者でも観点を追えるようにチュートリアル化した工程タブを提供する。\n- (sim=0.013) - 段階導入時は表示制御を行い対象工程のみを有効化する。\n- (sim=0.013) - 工程タブは企画からテストまでを段階導入では表示制御し初学者の判断導線を維持する。\n- (sim=0.013) - 出力はAllureに集約し自動ゲート結果と人の判断ログとダッシュボード添付を一体管理する。\n- (sim=0.013) - 段階導入では表示制御\n- (sim=0.013) - 段階導入では表示制御を行う。\n- (sim=0.026) description: 視座共有＋人の最終判断\n- (sim=0.027) - Abortとする場合は理由を必須とし、Doneは理由不要とする。\n- (sim=0.027) - Gate Runnerの出力はAllureへ集約し自動ゲート結果と判断ログを一体で監査できるようにする。\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

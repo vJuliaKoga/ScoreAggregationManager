@@ -1,0 +1,42 @@
+{
+  "uuid": "faeffc1c-f6e9-4d82-9f26-a8f91ba9d579",
+  "name": "Coverage :: PLN-PLN-QADESIGN-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772946652212,
+  "stop": 1772946652212,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.4167"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-QADESIGN-001.md'] covered_items=10/24 (sim_th=0.25)",
+  "steps": []
+}

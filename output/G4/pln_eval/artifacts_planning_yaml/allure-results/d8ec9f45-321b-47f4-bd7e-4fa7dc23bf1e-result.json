@@ -1,0 +1,42 @@
+{
+  "uuid": "d8ec9f45-321b-47f4-bd7e-4fa7dc23bf1e",
+  "name": "Faithfulness :: PLN-PLN-PHILOSOPHY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772946652212,
+  "stop": 1772946659369,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.6667"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=2 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.070) - 『考えなくていいQA』ではなく『考える順番を固定するQA』\n- (sim=0.093) - AIに判断を委譲しない（判断は人、検証は自動、証跡はシステム）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

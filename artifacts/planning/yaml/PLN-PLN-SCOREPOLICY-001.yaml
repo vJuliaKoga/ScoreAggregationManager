@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:07+09:00'
   model: gpt-5.2
   content_hash: a1e64c82e8485341e67c44bc9821840077a3bfa61483bae2de6942689ba3b6d7
@@ -28,6 +29,9 @@ score_policy:
   - 0.70未満はWarningを必ず出す
   - Allure上でWarningとして表示
   - Warningに『理由要約／改善ガイド／再実行条件』をセットで出す
+  - 0.70未満の案件はAllure上でWarningとして表示し理由要約と改善ガイドと再実行条件を併記する。
+  - 第一段階の致命条件にはCI失敗とトレーサビリティ欠落と構造重大違反とFaithfulness壊滅と曖昧語過剰検出を含める。
+  - passscore：LOW Riskは70点以上、HIGH Riskは90点以上
   - '0.70は pass_threshold: 0.7 を社内標準の警告ラインとして採用'
   - 'Deep Eval：品質の"定量指標"。モデル変動を前提に、スコア推移を記録し劣化を検知する（Allureに推移も集約）。'
   - Promptfoo：プロンプト品質の回帰テストとして位置づけ、テンプレ改善サイクルの根拠にする。
@@ -54,7 +58,7 @@ score_policy:
     criterion: スキーマ逸脱など
   - condition: Faithfulness（整合性）壊滅
     gate: G4
-    criterion: DeepEvalスコアが0.6未満
+    criterion: Faithfulness壊滅はDeepEvalスコアが0.6未満であることを基準に即時失格とする。
   - condition: 曖昧語の過剰検出
     gate: G1
     criterion: 検出数が10件超

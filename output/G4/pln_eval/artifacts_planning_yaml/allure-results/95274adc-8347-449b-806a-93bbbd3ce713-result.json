@@ -1,0 +1,42 @@
+{
+  "uuid": "95274adc-8347-449b-806a-93bbbd3ce713",
+  "name": "Faithfulness :: PLN-PLN-QADESIGN-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970750938,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 要件側の derivedfrom へ接続する方針\n- (sim=0.000) - 『企画→要件へトレース可能』を自動検証できるようにする\n- (sim=0.000) - 検証可能性の観点から、成功条件やKPIが測定可能でテスト可能な言葉で表現されているかを確認する。\n- (sim=0.000) - スコープの観点から、スコープ内・外およびAbort条件が事前に定義されているかを確認する。\n- (sim=0.000) - 企画IDは要件側のderivedfromへ接続し企画から要件までのトレースを自動検証できる状態を維持する。\n- (sim=0.000) - 企画IDは要件側のderivedfromへ接続する方針を維持し企画→要件へトレース可能な状態を自動検証する。\n- (sim=0.000) - QA観点は検証可能性とスコープを中心に運用保守・証跡・権限の考慮を確認する。\n- (sim=0.000) - 構造の逸脱を最大リスクとして設計する。\n- (sim=0.000) - viewpoint: 検証可能性\n- (sim=0.000) - viewpoint: スコープ\n- (sim=0.000) principle: 構造の逸脱を最大リスクとして設計\n- (sim=0.000) - content: 曖昧語チェック + 内容lint\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -24,9 +24,15 @@ meta:
 - レジストリの next_nnn 更新
 - 発行ログ（id_issued_log.yaml）への追記
 - stdoutへ発行ID出力（他ツール連携を想定）
+- issue_id.pyはIDレジストリから指定キーの次IDを発行しnext_nnnを更新する。
+- 発行結果はid_issued_log.yamlへ追記し同時にstdoutへ出力して他ツール連携に利用する。
+- issue_id.pyはレジストリのnext_nnn更新とstdoutへ発行ID出力を同時に実施する。
+- 発行IDは他ツール連携を前提にid_issued_log.yamlへ追記して追跡可能にする。
 
 運用上の制約：
 
 - 現状は single-user 前提（ロックなし）で運用開始する
 - チーム同時利用が増えた段階でロック/集中管理へ拡張する
+- 運用開始時はsingle-user前提でロックなしとし同時利用が増えた段階で集中管理へ拡張する。
+- 運用開始時はsingle-user前提（ロックなし）で運用し同時利用増加時に拡張する。
 

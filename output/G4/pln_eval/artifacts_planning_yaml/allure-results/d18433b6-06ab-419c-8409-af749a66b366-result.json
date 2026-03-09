@@ -1,0 +1,42 @@
+{
+  "uuid": "d18433b6-06ab-419c-8409-af749a66b366",
+  "name": "Faithfulness :: PLN-PLN-PACK-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772969553256,
+  "stop": 1772969571836,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.3125"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=11 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - 企画を機械可読にする\n- (sim=0.000) - 企画段階のQA観点を入れる\n- (sim=0.016) - BASおよびDETパックは設計工程の品質観点を拡張する。\n- (sim=0.016) - PLNパックは企画を機械可読化し企画段階のQA観点を標準で適用する。\n- (sim=0.016) - 各工程パックはチェックリストとスキーマとプロンプトとテンプレートをセットで提供する。\n- (sim=0.016) - BASとDETパックは構造整合観点を拡張し後工程の設計崩壊を予防する。\n- (sim=0.032) - pack: REQ（要件）\n- (sim=0.032) - REQパックは要件妥当性チェックをhumanレビューとDeep Evalの両方で実施する。\n- (sim=0.048) - 要件妥当性チェック（human+Deep Eval）\n- (sim=0.048) - pack: PLN（企画）\n- (sim=0.065) - PLNパック（企画）は企画を機械可読にし、企画段階のQA観点を標準装備する。\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

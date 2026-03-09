@@ -1,0 +1,42 @@
+{
+  "uuid": "eceabdc9-9f41-4989-9e84-5ec1f88472b3",
+  "name": "Coverage :: PLN-PLN-GOAL-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772946652212,
+  "stop": 1772946652212,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-GOAL-001.md'] covered_items=3/3 (sim_th=0.25)",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "9cd07e20-21f7-4bd2-acc2-a935fb0a560d",
+  "name": "Coverage :: PLN-PLN-RISK-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970714525,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.6667"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-RISK-001.md'] covered_items=10/15 (sim_th=0.25)",
+  "steps": []
+}

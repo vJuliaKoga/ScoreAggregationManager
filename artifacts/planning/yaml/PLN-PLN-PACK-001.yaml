@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:06+09:00'
   model: gpt-5.2
   content_hash: 63388e6e44d8be3eb9aed3536a0570c77038031b3a900796f2dc9e4a600c342c
@@ -23,6 +24,13 @@ architecture: null
 workflow:
   pack_strategy:
     principle: 本体（フレーム）は共通、工程ごとの『チェックリスト/スキーマ/プロンプト/テンプレ』をパックとして提供
+    descriptions:
+    - PLNパック（企画）は企画を機械可読にし、企画段階のQA観点を標準装備する。
+    - BASおよびDETパックは設計工程の品質観点を拡張し設計崩壊を予防する。
+    - PLNパックは企画を機械可読化し企画段階のQA観点を標準で適用する。
+    - REQパックは要件妥当性チェックをhumanレビューとDeep Evalの両方で実施する。
+    - 各工程パックはチェックリストとスキーマとプロンプトとテンプレートを含み後工程の自動化と検証に接続する。
+    - BASとDETパックは構造整合観点を拡張し後工程の設計崩壊を予防する。
     packs:
     - pack: PLN（企画）
       contents:

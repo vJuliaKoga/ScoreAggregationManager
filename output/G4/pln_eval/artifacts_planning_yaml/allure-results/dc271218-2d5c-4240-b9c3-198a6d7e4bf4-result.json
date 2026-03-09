@@ -1,0 +1,42 @@
+{
+  "uuid": "dc271218-2d5c-4240-b9c3-198a6d7e4bf4",
+  "name": "Faithfulness :: PLN-PLN-ROADMAP-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772953039174,
+  "stop": 1772953499015,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.8571"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "",
+  "steps": []
+}

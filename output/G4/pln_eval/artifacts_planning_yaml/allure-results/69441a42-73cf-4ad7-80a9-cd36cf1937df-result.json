@@ -1,0 +1,42 @@
+{
+  "uuid": "69441a42-73cf-4ad7-80a9-cd36cf1937df",
+  "name": "Coverage :: PLN-PLN-CFUI-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772967357216,
+  "stop": 1772967357216,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.7564"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-CFUI-001.md'] covered_items=59/78 (sim_th=0.25)",
+  "steps": []
+}

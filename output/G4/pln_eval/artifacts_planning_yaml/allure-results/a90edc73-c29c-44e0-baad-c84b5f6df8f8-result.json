@@ -1,0 +1,42 @@
+{
+  "uuid": "a90edc73-c29c-44e0-baad-c84b5f6df8f8",
+  "name": "Coverage :: PLN-PLN-PACK-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772948857973,
+  "stop": 1772948857973,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.25"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-PACK-001.md'] covered_items=2/8 (sim_th=0.25)",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "447975ac-885f-4d05-a0da-a8fd4fd26113",
+  "name": "Coverage :: PLN-PLN-CHECKLIST-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970714525,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.5882"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-CHECKLIST-001.md'] covered_items=10/17 (sim_th=0.25)",
+  "steps": []
+}

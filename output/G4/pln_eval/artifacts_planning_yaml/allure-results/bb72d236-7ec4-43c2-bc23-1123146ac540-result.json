@@ -1,0 +1,42 @@
+{
+  "uuid": "bb72d236-7ec4-43c2-bc23-1123146ac540",
+  "name": "Faithfulness :: PLN-PLN-CFUI-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772953039174,
+  "stop": 1772953068783,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.2258"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) design_note: 詳細な権限境界・UI設計は基本設計フェーズで確定する\n- (sim=0.000) design_note: 詳細なJSON構造・スキーマは詳細設計フェーズで確定する\n- (sim=0.000) note: 基本設計フェーズで詳細を確定する\n- (sim=0.000) - G2工程にてCheckFlowが生成する checklistresults.json が Gate Runner の入力として必須\n- (sim=0.000) - 出力JSONをRunnerが消費・検証するため、データフォーマットの早期確定が両プロジェクトに影響\n- (sim=0.000) - JSON定義仕様の早期確定（企画完了後、要件定義フェーズ冒頭で実施）\n- (sim=0.000) - checklistresults.json スキーマの確定は要件定義フェーズで最優先\n- (sim=0.000) ui_goal: NotebookLMのような動的展開型マインドマップUIを活用した品質ゲート基盤\n- (sim=0.000) concept_name: テンプレート駆動型アプリケーション\n- (sim=0.000) adoption: PWA（Progressive Web App）\n- (sim=0.000) - responsibilities: チェックリストの実行・状態更新・JSONエクスポート\n- (sim=0.000) method: 認証なし（任意）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

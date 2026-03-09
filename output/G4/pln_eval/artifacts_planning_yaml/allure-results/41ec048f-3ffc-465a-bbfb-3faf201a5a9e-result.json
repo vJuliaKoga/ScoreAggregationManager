@@ -1,0 +1,42 @@
+{
+  "uuid": "41ec048f-3ffc-465a-bbfb-3faf201a5a9e",
+  "name": "Coverage :: PLN-PLN-IDISSUANCE-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772946652212,
+  "stop": 1772946652212,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.6667"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-IDISSUANCE-001.md'] covered_items=6/9 (sim_th=0.25)",
+  "steps": []
+}

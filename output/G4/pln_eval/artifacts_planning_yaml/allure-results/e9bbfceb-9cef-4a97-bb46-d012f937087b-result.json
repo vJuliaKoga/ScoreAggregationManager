@@ -1,0 +1,42 @@
+{
+  "uuid": "e9bbfceb-9cef-4a97-bb46-d012f937087b",
+  "name": "Coverage :: PLN-PLN-SCOREPOLICY-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772946652212,
+  "stop": 1772946652212,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.8077"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-SCOREPOLICY-001.md'] covered_items=21/26 (sim_th=0.25)",
+  "steps": []
+}

@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:04+09:00'
   model: gpt-5.2
   content_hash: f5bcc2051fab5c9a778a09580d25799d7e6f492a67324d352eb22fded22a13cf
@@ -21,20 +22,20 @@ problem:
   - topic: 仕様の曖昧性
     note: 曖昧語（例：『適切に』『柔軟に』）が頻出し、AIが誤解釈しやすい
   - topic: 仕様と実装の乖離
-    note: 要件定義・設計書・実UIが一致せず、テスト工数増・手戻りが起きやすい
+    note: 仕様の曖昧性と仕様と実装の乖離は手戻り増加を招く主要課題である。
   - topic: QA観点の属人化
     note: 何を確認すべきかが個人経験に依存し、新人が萎えやすい
   - topic: 判断根拠の不在
-    note: なぜそう判断したかが残らず、保守で詰む
+    note: QA観点の属人化と判断根拠の不在は責任の不明確化を招く要因である。
   - topic: 品質の不可視性
-    note: QA実施の有無は分かっても中身が見えない
+    note: 品質の不可視性はQA実施の有無だけでは中身が見えず判断根拠を追跡できない状態である。
   root_causes:
   - 構造化されていない知識
   - 検証不能な記述
   - トレーサビリティ欠如
   introduction_viewpoints:
   - issue: QA観点の属人化
-    direction: CheckFlowでチュートリアル化
+    direction: 導入方針は企画段階から工程パックで運用しCheckFlowでチュートリアル化する。
   - issue: 品質観点の後回し
     direction: 企画段階から工程パックで導入
   - issue: 責任の不明確化

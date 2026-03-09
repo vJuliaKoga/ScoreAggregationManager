@@ -25,6 +25,9 @@ meta:
 - status(Done|Abort)
 - reason
 - evidencerefs
+- statusはDoneまたはAbortで記録する。
+- checklistresults.jsonはcheckedbyとtimestampとreasonとevidencerefsを保持してG2検証に渡す。
+- checklistresults.jsonのstatus(Done|Abort)はG2判定の必須入力である。
 
 G2がこれらのフィールドを検証する。
 
@@ -32,4 +35,8 @@ G2がこれらのフィールドを検証する。
 
 - output/ の内容：各ゲートのレポートJSON＋サマリ（exitcode含む）
 - allure-results/ の内容：レポートに統合するための出力（Allure用）
+- Runnerのoutputには各ゲートのレポートJSONとexitcodeを含むサマリを出力する。
+- allure-resultsにはレポート統合用の出力を格納しAllureで可視化できるようにする。
+- outputには各ゲートのレポートJSONとサマリ（exitcode含む）を出力する。
+- allure-resultsはレポートに統合するための出力として保存する。
 

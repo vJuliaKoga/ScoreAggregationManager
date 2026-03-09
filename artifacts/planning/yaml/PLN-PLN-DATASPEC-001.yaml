@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:05+09:00'
   model: gpt-5.2
   content_hash: a07965cdd948a379448a9fb194300a0cee464f6a9a7ac929eb6dd848acb1408a
@@ -30,9 +31,12 @@ architecture:
       - reason
       - evidencerefs
       verified_by: G2
+      notes:
+      - statusはDoneまたはAbortで記録する。
+      - checklistresults.jsonはcheckedbyとtimestampとreasonとevidencerefsを保持してG2検証に渡す。
     gate_runner_outputs:
     - path: output/
-      contents: 各ゲートのレポートJSON＋サマリ（exitcode含む）
+      contents: Runnerのoutputには各ゲートのレポートJSONとexitcodeを含むサマリを出力する。
     - path: allure-results/
       contents: レポートに統合するための出力
 workflow: null

@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:08+09:00'
   model: gpt-5.2
   content_hash: ac5e9805d0ae4d1ada3163d7346bdf4aca42e100e21369d369a49d9386c90605
@@ -35,9 +36,12 @@ traceability:
     - ID抽出
     - 参照整合（derivedfrom/tracestoの存在確認）
     - カバレッジ算出
+    - CoreレイヤーはID抽出と参照整合確認とカバレッジ算出を担当し結果をAllureへ出力する。
     - 未紐付け一覧
     - Allure出力
   - layer: Adapter（将来）
     capabilities:
     - ConTrack API連携（存在確認、リンク生成、関係解決）
-  value_statement: ConTrackが既にあっても『品質ゲートとしての検査・可視化・ブロック』の価値が本企画側に残る
+    - Adapterレイヤーは将来拡張としてConTrack API連携を受け持つ。
+    - ConTrack連携では存在確認とリンク生成と関係解決を段階的に実装する。
+  value_statement: 既存のConTrackが存在しても品質ゲートとしての検査と可視化とブロック機能は本企画側の価値として維持する。

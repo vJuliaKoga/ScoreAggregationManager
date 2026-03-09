@@ -1,0 +1,42 @@
+{
+  "uuid": "9864a40c-1470-4a40-9c45-8ffcc7b2d4a7",
+  "name": "Faithfulness :: PLN-PLN-SCOREPOLICY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970742995,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.25"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=12 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - condition: CI失敗\n- (sim=0.000) - condition: トレーサビリティ欠落\n- (sim=0.000) - condition: 構造重大違反\n- (sim=0.000) - condition: 曖昧語の過剰検出\n- (sim=0.000) guidance: 軽微な構造違反や数件の曖昧語は減点対応とし、スピードを優先\n- (sim=0.000) guidance: 厳格な統制を適用。微細な逸脱も修正対象\n- (sim=0.000) - Allure上でWarningとして表示\n- (sim=0.000) - '0.70は pass_threshold: 0.7 を社内標準の警告ラインとして採用'\n- (sim=0.013) - Warningに『理由要約／改善ガイド／再実行条件』をセットで出す\n- (sim=0.013) criterion: ID参照の不整合、または孤立した定義の存在\n- (sim=0.013) criterion: DeepEvalスコアが0.6未満\n- (sim=0.013) - level: LOW Risk\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

@@ -1,0 +1,42 @@
+{
+  "uuid": "ef8e06d5-329a-4f0a-b656-75518435e81c",
+  "name": "Coverage :: PLN-PLN-DATASPEC-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772969553256,
+  "stop": 1772969553256,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.7143"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-DATASPEC-001.md'] covered_items=10/14 (sim_th=0.25)",
+  "steps": []
+}

@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:05+09:00'
   model: gpt-5.2
   content_hash: cd0c77dc8b55b9bbc77e050db2cfccc7f2e318affb276a7c32d5dd81a02989bb

@@ -1,0 +1,42 @@
+{
+  "uuid": "de818c8f-6780-4119-97f9-385afae7dc4d",
+  "name": "Completeness :: GLOBAL",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772967357216,
+  "stop": 1772967357228,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Completeness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "avg_of_files=22",
+  "steps": []
+}

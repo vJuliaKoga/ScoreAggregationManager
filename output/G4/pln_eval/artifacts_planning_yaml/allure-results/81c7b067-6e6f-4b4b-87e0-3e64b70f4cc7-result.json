@@ -1,0 +1,42 @@
+{
+  "uuid": "81c7b067-6e6f-4b4b-87e0-3e64b70f4cc7",
+  "name": "Completeness :: PLN-PLN-ROADMAP-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772948857973,
+  "stop": 1772948857973,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Completeness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "1.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "null_total=14 suspicious_nulls=0 (evidence_th=0.12)",
+  "steps": []
+}

@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:04+09:00'
   model: gpt-5.2
   content_hash: 85cb512545bf0755cf3d07f5bb3feafcf91d1d8ce82a308e66f2e1d627613900
@@ -48,15 +49,16 @@ integration:
     - allure-results/（Allure用）
     - 付随証跡（差分/リンク/ログ）
   - step: 2
-    action: ワークフローツール最終工程で CI成果物（zip等）をアップロード
+    action: ワークフローツール最終工程ではCI成果物のzip等アップロードを必須にする。
   - step: 3
-    action: 同工程でチェックリスト入力を確定（Coach相当）
+    action: 同工程でCoach相当のチェックリスト入力を確定し合計点を算出する。
   - step: 4
     action: 集約（軽量）で合計点/分布/判定を生成し、Allureに統合
     generates:
     - 合計点（自動＋チェックリスト）
     - スコア分布（軸別/ゲート別）
     - 判定（最終は人のDone/Abortを主、自動はWarn/Info中心）
+    - 判定結果はpassとwarnとfailの三値で出力しAllureへ統合する。
   minimum_artifact_spec:
     ci_gate_json:
       required_fields:
@@ -79,6 +81,8 @@ integration:
   - Concern/NG は原則 理由必須（証跡リンク/該当箇所参照を推奨）
   judgment_policy:
   - スコアは合否の唯一根拠にしない（最終判断は人のDone/Abort）
+  - 人の判断ログではAbortの理由を必須とし、Doneは理由不要とする。
+  - 自動ゲート結果と人の判断ログと最終サマリを統合して保管する。
   - 0.70未満は必ずWarningを出す
   - ブロック（Fail）条件は重大ゲート（例：スキーマ逸脱、必須情報欠落等）に限定し、段階的に導入
 traceability: null

@@ -1,0 +1,42 @@
+{
+  "uuid": "77df26d2-8580-4992-a52e-68b2fa1dc1aa",
+  "name": "Coverage :: PLN-PLN-ALLURE-001.yaml",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1772942779725,
+  "stop": 1772942779725,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Coverage"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.9"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "pass"
+    }
+  ],
+  "description": "derived_from=['PLN-PLN-ALLURE-001.md'] covered_items=9/10 (sim_th=0.25)",
+  "steps": []
+}

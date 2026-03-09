@@ -26,6 +26,14 @@ schemas:
   inspection_design: "packs/pln_pack/schemas/inspection_design.schema.json"
 
 steps:
+  - id: "G0-MD-GUARD"
+    kind: "md_yaml_paste_guard"
+    targets:
+      - "artifacts/planning/PLN-PLN-SPLIT-001/PLN-PLN-ALLURE-001.md"
+      - "artifacts/planning/PLN-PLN-SPLIT-001/PLN-PLN-CI_INTEGRATION-001.md"
+      - "artifacts/planning/PLN-PLN-SPLIT-001/PLN-PLN-KPI-001.md"
+      - "artifacts/planning/PLN-PLN-SPLIT-001/PLN-PLN-SOLUTION-001.md"
+
   - id: "G3-GOAL"
     kind: "schema"
     target: "${artifacts.goal_yaml}"

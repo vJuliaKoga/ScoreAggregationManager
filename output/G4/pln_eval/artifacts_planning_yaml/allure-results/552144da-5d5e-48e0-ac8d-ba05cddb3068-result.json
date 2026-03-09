@@ -1,0 +1,42 @@
+{
+  "uuid": "552144da-5d5e-48e0-ac8d-ba05cddb3068",
+  "name": "Faithfulness :: PLN-PLN-USER-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772948857973,
+  "stop": 1772948863955,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] LOW_SIGNAL\n[signal] no_low_support_lines_detected\n[action]\n- 参照MDが薄い場合: split MDへ要点を逆輸入（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: （案）（要検討）に落とす/断定を弱める\n",
+  "steps": []
+}

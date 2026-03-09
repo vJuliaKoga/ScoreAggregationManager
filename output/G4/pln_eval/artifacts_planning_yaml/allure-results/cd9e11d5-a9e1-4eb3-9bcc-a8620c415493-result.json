@@ -1,0 +1,42 @@
+{
+  "uuid": "cd9e11d5-a9e1-4eb3-9bcc-a8620c415493",
+  "name": "Faithfulness :: PLN-PLN-TRACEABILITY-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970728056,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.0"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "fail"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=5 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.000) - Allure出力\n- (sim=0.030) value_statement: ConTrackが既にあっても『品質ゲートとしての検査・可視化・ブロック』の価値が本企画側に残る\n- (sim=0.032) - layer: Core（本ツール）\n- (sim=0.032) - layer: Adapter（将来）\n- (sim=0.063) - ConTrack API連携（存在確認、リンク生成、関係解決）\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}

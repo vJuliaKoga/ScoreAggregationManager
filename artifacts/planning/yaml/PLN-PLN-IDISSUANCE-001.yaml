@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:06+09:00'
   model: gpt-5.2
   content_hash: 32fb5c6adb62b13bf3f68e990949a89871a25849b2132395a06995a5aa43fdf7
@@ -28,14 +29,14 @@ inspection_design: null
 config_artifacts: null
 id_issuer:
   utility:
-    name: issue_id.py
+    name: issueid.py
     functions:
-    - IDレジストリ（id_rules_registry.yaml）を読み、指定キー（PREFIX-PHASE-PURPOSE）の次IDを発行
-    - レジストリの next_nnn 更新
-    - 発行ログ（id_issued_log.yaml）への追記
-    - stdoutへ発行ID出力（他ツール連携を想定）
+    - issueid.pyはIDレジストリから指定キーの次IDを発行しnextnnnを更新する。
+    - issueid.pyはレジストリのnextnnn更新とstdoutへ発行ID出力を同時に実施する。
+    - 発行結果はidissuedlog.yamlへ追記し同時にstdoutへ出力して他ツール連携に利用する。
+    - 発行IDは他ツール連携を前提にidissuedlog.yamlへ追記して追跡可能にする。
   operation_assumption:
-  - 現状は single-user 前提（ロックなし）で運用開始
+  - 現状はsingle-user前提（ロックなし）での運用を想定する。
   - チーム同時利用が増えた段階でロック/集中管理へ拡張
 integration: null
 traceability: null

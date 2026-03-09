@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:05+09:00'
   model: gpt-5.2
   content_hash: f610ea4a902f101e847758b7f2b734174873206c5f5f0fe6b71df52ba480818c
@@ -19,13 +20,13 @@ goal: null
 problem: null
 scope:
   internal_definition:
-  - ① AIに正しく指示を与える
-  - ② 指示が守られていることを確認する
+  - QA4AIDDの第一目的はAIに正しく指示を与えることである。
+  - QA4AIDDの第二目的は指示遵守をJSON Schema検証とDeep Eval評価と構造一貫性テストで確認することである。
   implementation_mapping:
   - definition: 正しく指示
     implementation:
-    - 構造化テンプレ
-    - 曖昧語排除チェック
+    - 構造化テンプレート
+    - 曖昧語排除チェックは指示品質を担保する前段の必須検査として扱う。
   - definition: 遵守確認
     implementation:
     - JSON Schema検証
@@ -33,7 +34,10 @@ scope:
     - 構造一貫性テスト
   - definition: 品質可視化
     implementation:
-    - Allure Reportでゲート結果をモニタ
+    - 品質可視化はAllure Reportでゲート結果をモニタし継続運用する。
+  alignment_notes:
+  - ① AIに正しく指示を与えることをQA4AIDDの起点とする。
+  - ② 指示が守られていることをJSON Schema検証とDeep Eval評価と構造一貫性テストで確認する。
 constraints: null
 architecture: null
 workflow: null

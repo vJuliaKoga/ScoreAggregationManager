@@ -4,7 +4,8 @@ meta:
   author: gpt-5.2
   source_type: ai
   source: codex
-  prompt_id: PRM-PLN-YAML-001
+  prompt_id: PRM-PLN-G4-FIX-004
+  reviewed_by_report: RES-PLN-G4-REVIEW-002.md
   timestamp: '2026-03-04T08:20:07+09:00'
   model: gpt-5.2
   content_hash: 9a02d018b67dccaa47eab5859daf2f5f06cfe7dc70ccf99951af810e4425f46d
@@ -24,16 +25,20 @@ constraints:
     mitigations:
     - ゲートでブロック
     - 理由品質の最低基準を設ける
+    - Abort判断の理由品質が基準未満の場合は再評価を求める。
   - risk: AIモデル変動
     mitigations:
     - モデル固定
     - スコア推移監視
     - Warning運用
+    - AIモデル変動のリスクにはモデル固定とスコア推移監視を組み合わせWarning運用で早期検知する。
+    - Warning運用は判断回避の常態化を抑止する。
   - risk: 導入ハードル
     mitigations:
-    - Coach先行で教育
+    - CheckFlow先行で教育
     - Runner任意
     - CIへ段階移行
+    - 導入ハードルのリスクにはCoach先行で教育しRunnerは任意導入からCIへ段階移行する。
 architecture: null
 workflow: null
 score_policy: null

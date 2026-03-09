@@ -22,7 +22,8 @@ goal:
   - 理由記入率（100%）
   - CI組込みチーム数
   - 手戻り削減率
-  note: Phase別に設定
+  note: Phase別に設定する。
+  description: CheckFlow利用者数とチェックリスト完了率とAbort理由の記入率とCI組込みチーム数と手戻り削減率などをKPIとして設定する。
 problem: null
 scope: null
 constraints: null

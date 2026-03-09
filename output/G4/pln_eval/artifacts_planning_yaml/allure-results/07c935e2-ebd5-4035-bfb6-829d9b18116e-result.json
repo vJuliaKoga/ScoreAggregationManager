@@ -1,0 +1,42 @@
+{
+  "uuid": "07c935e2-ebd5-4035-bfb6-829d9b18116e",
+  "name": "Faithfulness :: PLN-PLN-ALLURE-001.yaml",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1772970714525,
+  "stop": 1772970727774,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "G4 PLN Transform"
+    },
+    {
+      "name": "feature",
+      "value": "Faithfulness"
+    },
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "G4"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "score",
+      "value": "0.5556"
+    },
+    {
+      "name": "model",
+      "value": "gpt-5.2"
+    },
+    {
+      "name": "status",
+      "value": "warn"
+    }
+  ],
+  "description": "[label] SSOT_GAP_OR_OVERASSERT\n[signal] low_support_lines=9 (sim_th=0.12)\n[top_missing_lines]\n- (sim=0.016) - text: 自動ゲート結果はG1〜G5およびPromptfooの結果を一覧で表示し、各ゲートの判定とスコアとエビデンス参照を確認できるようにする。\n- (sim=0.017) - text: G2の証跡リンクは必要な場合に付けられるようにする。\n- (sim=0.017) - text: 各ゲートの内訳とスコア分布はゲート別および評価軸別に確認できるようにする。\n- (sim=0.033) - text: G2は人のチェックリスト結果を別枠で表示し、チェック項目ごとのスコアを集計して反映する。\n- (sim=0.033) - text: G2のAbortは理由を必須とし、Doneは理由不要とする。\n- (sim=0.033) - text: Abort分析はカテゴリ分布と理由品質を集計し、判断回避の常態化を検知する。\n- (sim=0.033) - text: Traceability Matrixは要件から設計とテストへの紐付けを表示する。\n- (sim=0.050) - text: スコア推移はDeep EvalとPromptfooの推移を追跡し、モデル変動や改修前後の品質変化を可視化する。\n- (sim=0.067) - text: 重み付き合算スコアはG1〜G5とPromptfooの各スコアをウェイト定義（9.3節）に基づいて合算した総合指標である。\n[action]\n- 参照MDが薄い場合: split MD(derived_from)へ上記要点を根拠として追記（箇条書き3〜5）\n- YAMLが言い切りすぎの場合: 断定語を弱める/（案）（要検討）に落とす/参照に根拠追記\n- 用語ゆれの場合: split MDとYAMLで表現を統一（別名併記も可）\n",
+  "steps": []
+}
